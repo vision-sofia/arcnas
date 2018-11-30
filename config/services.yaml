@@ -28,4 +28,19 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    App\EventListener\Doctrine\TraceSetter:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
+    App\EventListener\Doctrine\PictureUploadListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: postLoad }
+
+    App\Services\Upload\UploadService:
+        arguments:
+            $targetDirectory: '%media_upload_dir%'
+
+
+
 
