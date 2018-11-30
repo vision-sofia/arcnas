@@ -8,6 +8,10 @@
             <ul class="navbar-nav ml-auto">
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app.upload') }}">Качи снимка</a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ path('logout') }}">Изход</a>
                     </li>
                 {% else %}
