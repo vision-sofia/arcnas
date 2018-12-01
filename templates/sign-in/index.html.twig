@@ -3,7 +3,9 @@
 {% block body %}
     <div class="container">
         <div class="section">
-            <form action="{{ path('app.login.check') }}" method="post" class="login-form" class="g-py-15">
+            <h1 class="title">Вход в профила</h1>
+
+            <form action="{{ path('app.login.check') }}" method="post" class="login-form">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
                 <div class="field">
@@ -21,8 +23,8 @@
 
                 <a class="button is-warning mtb10"
                    id="submit-button"
-                   onclick="loginCtrl.login()">Вход</a>
-                
+                   onclick="userCtrl.signIn()">Влез</a>
+
             </form>
         </div>
     </div>
