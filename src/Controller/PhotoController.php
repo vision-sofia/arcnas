@@ -78,31 +78,42 @@ class PhotoController extends AbstractController
             ]);
         }
 
-        $labels = $this->transform($photo->getMetadata());
-
-
         $elements = $this->getDoctrine()->getRepository(Element::class)->findAll();
 
+        $w = [];
+
+        foreach ($elements as $element) {
+            $id = $element->getId();
+            $w[$id] = [
+                'id'    => $element->getId(),
+                'color' => $element->getPrimaryColor(),
+                'name'  => $element->getName(),
+            ];
+        }
+
+        $marks = $this->transform($photo->getMetadata(), $w);
 
         return $this->render('photo/index.html.twig', [
-            'photo' => $photo,
-            'form' => $form->createView(),
-            'labels' => $labels,
-            'elements' => $elements
+            'photo'    => $photo,
+            'form'     => $form->createView(),
+            'labels'   => $marks,
+            'elements' => $elements,
         ]);
     }
 
-    public function transform(array $metadata): array
+    public function transform(array $metadata, array $elements): array
     {
         $result = [];
 
         if (!empty($metadata['sectors'])) {
             foreach ($metadata['sectors'] as $k => $v) {
+
+                $v['element'] = $elements[$v['element_id']];
                 $v['geo'] = json_decode($v['geo'], true);
                 $v['position'] = [
-                    'top' => $v['geo']['coordinates'][0][0][1],
-                    'left' => $v['geo']['coordinates'][0][0][0],
-                    'width' => $v['geo']['coordinates'][0][2][0] - $v['geo']['coordinates'][0][0][0],
+                    'top'    => $v['geo']['coordinates'][0][0][1],
+                    'left'   => $v['geo']['coordinates'][0][0][0],
+                    'width'  => $v['geo']['coordinates'][0][2][0] - $v['geo']['coordinates'][0][0][0],
                     'height' => $v['geo']['coordinates'][0][2][1] - $v['geo']['coordinates'][0][0][1],
                 ];
 
