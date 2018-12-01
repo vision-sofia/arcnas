@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\ConfigurationList\Element;
 use App\Entity\Photo;
 use App\Entity\PhotoElement;
 use App\Event\Events;
@@ -79,10 +80,15 @@ class PhotoController extends AbstractController
 
         $labels = $this->transform($photo->getMetadata());
 
+
+        $elements = $this->getDoctrine()->getRepository(Element::class)->findAll();
+
+
         return $this->render('photo/index.html.twig', [
             'photo' => $photo,
             'form' => $form->createView(),
             'labels' => $labels,
+            'elements' => $elements
         ]);
     }
 

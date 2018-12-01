@@ -184,24 +184,41 @@ var photoCtrl = {
   
   
   addItem: function () {
-    console.log(100, this.getListOfCoordinates());
-    let selectedItemType = $('.add-item-form select#itemType');
+    let valid = true;
+    let elementVal = $('.add-item-form .itemType select').val();
+    if (!elementVal) {
+      $('.add-item-form .itemType .select').addClass('is-danger');
+      valid = false;
+    }
   
-    this.makePassive(selectedItemType);
-  
-    // create new active rect
-    this.drawable = true;
-    $('.photo-wrapper').append('<div class="rect active-rect"></div>');
-  
-    this.deactivateForm();
-  
-    // hide clear button
-    $('.add-item-form #clear-button').css({
-      display: 'none'
-    });
+    let conditionVal = $('.add-item-form .itemCondition select').val();
+    if (!conditionVal) {
+      $('.add-item-form .itemCondition .select').addClass('is-danger');
+      valid = false;
+    }
     
-    // add to items list
-    itemsList.addItem(selectedItemType.val());
+    if (valid) {
+      $('.add-item-form').submit();
+    }
+    return;
+      
+    // let selectedItemType = $('.add-item-form .itemType select');
+  
+    // this.makePassive(selectedItemType);
+    //
+    // // create new active rect
+    // this.drawable = true;
+    // $('.photo-wrapper').append('<div class="rect active-rect"></div>');
+    //
+    // this.deactivateForm();
+    //
+    // // hide clear button
+    // $('.add-item-form #clear-button').css({
+    //   display: 'none'
+    // });
+    //
+    // // add to items list
+    // itemsList.addItem(selectedItemType.val());
   },
   
   getListOfCoordinates: function () {
@@ -213,6 +230,7 @@ var photoCtrl = {
   },
   
   makePassive: function (selectedItemType) {
+    console.log(selectedItemType);
     let rectObj = $('.active-rect');
     let rectId = Math.floor(Math.random() * Math.floor(10000));
     
