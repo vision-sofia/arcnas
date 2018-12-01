@@ -89,9 +89,8 @@
 
 
 .rect.passive-rect {
-    /*display: block;*/
     display: none;
-    border: 1px solid red;
+    border: 1px solid;
     background-color: rgba(150, 150, 150, 0.5);
     z-index: 1;
     opacity: 0.5;
@@ -121,4 +120,9 @@
 
 .items li a {
     display: none;
+}
+
+.item-color-mark {
+    font-weight: bold;
+    background-color: transparent !important;
 }

@@ -20,6 +20,6 @@ var itemsList = {
     });
     let countOfItemsOfThisType = $('.passive-rect.rect-type-' + itemType).length;
     itemsList.find('li#item-' + itemType + ' a').html(
-      itemTypes[itemType] + ' <span class="tag is-light">' + countOfItemsOfThisType + '</span> <span>&bull;</span>');
+      itemTypes[itemType].name + ' <span class="tag is-light">' + countOfItemsOfThisType + '</span> <span class="tag item-color-mark" style="color: ' + itemTypes[itemType].color + '">&bull;</span>');
   }
 };
