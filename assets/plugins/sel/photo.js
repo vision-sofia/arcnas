@@ -7,10 +7,14 @@ var photo = {
   drawable: true,
   
   onLoad: function () {
+    // center image
     let img = $('img');
-    let photoWrapper = $('.photo-wrapper');
-    photoWrapper.css({
-      width: img.width()
+    $('.photo-wrapper').css({
+      width: img.width(),
+      'margin-left': '-' + img.width()/2 + 'px'
+    });
+    $('.photo-panel-position-wrapper').css({
+      'margin-left': '50%'
     });
   },
   
