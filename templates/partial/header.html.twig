@@ -1,91 +1,31 @@
 
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
+<nav class="navbar is-warning" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="logo" href="{{ path('app.index') }}">ArcNas</a>
+        <a href="{{ path('app.index') }}">ArcNas</a>
     </div>
 
     <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-            <a class="navbar-item">
-                Home
-            </a>
-
-            <a class="navbar-item">
-                Documentation
-            </a>
-
-            <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link">
-                    More
-                </a>
-
-                <div class="navbar-dropdown">
-                    <a class="navbar-item">
-                        About
-                    </a>
-                    <a class="navbar-item">
-                        Jobs
-                    </a>
-                    <a class="navbar-item">
-                        Contact
-                    </a>
-                    <hr class="navbar-divider">
-                    <a class="navbar-item">
-                        Report an issue
-                    </a>
-                </div>
-            </div>
-        </div>
-
         <div class="navbar-end">
             <div class="navbar-item">
-                <div class="buttons">
-                    <a class="button is-primary">
-                        <strong>Sign up</strong>
-                    </a>
-                    <a class="button is-light">
-                        Log in
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
-
-
-
-
-
-<nav class="header">
-    <div class="container">
-        <a class="logo" href="{{ path('app.index') }}">ArcNas</a>
-
-
-
-
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app.upload') }}">Качи снимка</a>
-                    </li>
+                    <a class="button is-danger mlr10" href="{{ path('app.upload') }}">
+                        <span class="icon is-small">
+                          <i class="fas fa-upload"></i>
+                        </span>
+                        <strong>Качи снимка</strong>
+                    </a>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('logout') }}">Изход</a>
-                    </li>
+                    <a class="button is-warning mlr10" href="{{ path('logout') }}">
+                        <strong>Изход</strong>
+                    </a>
                 {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app.sign-in') }}">Вход</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app.sign-up') }}">Регистрация</a>
-                    </li>
+                    <a class="button is-warning mlr10" href="{{ path('app.sign-up') }}">
+                        <strong>Регистрация</strong>
+                    </a>
+                    <a class="button is-danger mlr10" href="{{ path('app.sign-in') }}">Вход</a>
                 {% endif %}
-            </ul>
+            </div>
         </div>
     </div>
 </nav>

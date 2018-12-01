@@ -13,8 +13,8 @@
                          onload="photoCtrl.onLoad()"
                          alt="" />
 
-                    {% for label in labels %}
-                    <div class="rect passive-rect rect-type-' + r.type + '" style="top: {{ label.position.top }}%; left: {{ label.position.left }}%; width: {{ label.position.width }}%; height: {{ label.position.height }}%; border-color: red"></div>
+                    {% for mark in marks %}
+                    <div class="rect passive-rect rect-type-{{ mark.element.id }}" style="top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
                     {% endfor %}
 
                     <div class="rect active-rect"></div>
@@ -46,7 +46,7 @@
                 </div>
             </div>
 
-            <a class="button is-link mtb10"
+            <a class="button is-danger mtb10"
                id="submit-button"
                onclick="photoCtrl.addItem()"
                disabled>Добави</a>
@@ -63,17 +63,23 @@
                 <p class="menu-label">
                     Отбелязани обекти
                 </p>
+
+
+
                 <ul class="menu-list">
-                    <li id="item-window"
-                        onmouseover="rectCtrl.showPassiveRects('window')"
-                        onmouseleave="rectCtrl.hidePassiveRects('window')">
-                        <a>Прозорец</a>
-                    </li>
-                    <li id="item-airconditioner"
-                        onmouseover="rectCtrl.showPassiveRects('airconditioner')"
-                        onmouseleave="rectCtrl.hidePassiveRects('airconditioner')">
-                        <a>Климатик</a>
-                    </li>
+                    {% for element in elements %}
+                        {%   if elementsCount[element.id] is defined %}
+                        <li id="item-{{ element.id }}"
+                            onmouseover="rectCtrl.showPassiveRects({{ element.id }})"
+                            onmouseleave="rectCtrl.hidePassiveRects({{ element.id }})">
+                            <a>
+                                {{ element.name }}
+                                <span class="tag is-light"> {{ elementsCount[element.id] }} </span>
+                                <span class="tag item-color-mark" style="color: {{ element.primaryColor }}">&bull;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
                 </ul>
                 <a class="button is-text"
                    onmouseover="rectCtrl.showAllPassiveRects()"
