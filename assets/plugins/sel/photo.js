@@ -105,12 +105,10 @@ var photo = {
     
     // workaround for last drag event zero coordinates
     let coordinates = this.getCoordinates(event);
-    if (coordinates.x <= 0 && coordinates.y <= 0 && !this.negativeCoordinates) {
+    if ((coordinates.x <= 0 || coordinates.y <= 0) && !this.negativeCoordinates) {
       this.negativeCoordinates = true;
       return;
     }
-    
-    
     
     let topLeft = {
       x: Math.max(Math.min(this.rect[0].x, this.rect[1].x), 0),
