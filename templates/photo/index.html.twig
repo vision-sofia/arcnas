@@ -11,19 +11,72 @@
 
     <div class="row">
         <div class="col-lg-9">
-            <div class="photo-panel">
+
+            <div class="photo-panel-position-wrapper">
                 <div class="photo-wrapper">
                     <img src="/media/{{ photo.file }}"
                          onclick="console.log(photo)"
-                         onmousedown="photo.onMouseDown(event, this)"
-                         ondrag="photo.onDrag(event, this)"
-                         ondragend="photo.onMouseUp(event, this)"
-                         onload="photo.onLoad()"
+                         onmousedown="photoCtrl.onMouseDown(event, this)"
+                         ondrag="photoCtrl.onDrag(event, this)"
+                         ondragend="photoCtrl.onMouseUp(event, this)"
+                         onload="photoCtrl.onLoad()"
                          alt="" />
+
                     <div class="rect active-rect"></div>
-                    <div style=" clear: both;"></div>
                 </div>
             </div>
+
+
+            {#
+            <div class="action-panel">
+
+                    <form class="add-item-form">
+                        <input type="text" hidden name="coordinates" id="coordinates" value="" />
+
+                        <div class="itemType">
+                            <label class="label">Тип на обекта</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select name="itemType" id="itemType">
+                                        <option value="window">Прозорец</option>
+                                        <option value="airconditioner">Климатик</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a class="button is-link mtb10"
+                           id="submit-button"
+                           onclick="photoCtrl.addItem()"
+                           disabled>Добави</a>
+                    </form>
+                    <hr />
+
+                    <aside class="menu items">
+                        <p class="menu-label">
+                            Отбелязани обекти
+                        </p>
+                        <ul class="menu-list">
+                            <li id="item-window"
+                                onmouseover="rectCtrl.showPassiveRects('window')"
+                                onmouseleave="rectCtrl.hidePassiveRects('window')">
+                                <a>Прозорец</a>
+                            </li>
+                            <li id="item-airconditioner"
+                                onmouseover="rectCtrl.showPassiveRects('airconditioner')"
+                                onmouseleave="rectCtrl.hidePassiveRects('airconditioner')">
+                                <a>Климатик</a>
+                            </li>
+                        </ul>
+                        <a class="button is-text"
+                           onmouseover="rectCtrl.showAllPassiveRects()"
+                           onmouseleave="rectCtrl.hideAllPassiveRects()">Покажи всички</a>
+
+                    </aside>
+                </div>
+                #}
+
+
         </div>
         <div class="col-lg-3">
             {{ form_start(form, {'attr': {'class': 'g-py-15 add-item-form', 'novalidate': 'novalidate'}}) }}
