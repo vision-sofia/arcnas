@@ -10,14 +10,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class SearchController extends AbstractController
 {
     /**
-     * @Route("", name="app.index")
+     * @Route("", name="app.search")
      */
     public function index(): Response
     {
-        $photos = $this->getDoctrine()->getRepository(Photo::class)->findAll();
+        return $this->render('search/index.html.twig', [
 
-        return $this->render('index/index.html.twig', [
-            'photos' => $photos,
         ]);
     }
 }
