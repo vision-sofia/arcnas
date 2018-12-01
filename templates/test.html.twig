@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="/assets/plugins/sel/style.css">
+    <script src="/assets/vendor/jquery/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="/assets/plugins/sel/underscore-1.9.1.min.js"></script>
+    <script src="/assets/plugins/sel/photo.js"></script>
+    <!--<script src="rect.js"></script>-->
+    <script src="/assets/plugins/sel/itemsList.js"></script>
+    <script src="/assets/plugins/sel/app.js"></script>
+</head>
+<body>
+
+<div class="body-wrapper">
+    <div class="photo-panel">
+
+        <div class="photo-wrapper">
+
+            <img src="http://arcnas.localhost/media/68eae748c55e22042c4dc60840f23cec.jpeg"
+                 onclick="console.log(photo)"
+                 onmousedown="photo.onMouseDown(event, this)"
+                 ondrag="photo.onDrag(event, this)"
+                 ondragend="photo.onMouseUp(event, this)"
+                 onload="photo.onLoad()"
+                 alt="" />
+
+            <div class="rect active-rect">
+                <span class="label" title="Климатик и прозорец"></span>
+            </div>
+
+            <div style=" clear: both;"></div>
+        </div>
+
+    </div>
+    <div class="action-panel">
+
+        <form class="add-item-form">
+            <input type="text" name="coordinates" value="" />
+            <select name="itemType">
+                <option value="window">Прозорец</option>
+                <option value="aircondotioner">Климатик</option>
+            </select>
+
+            <div onclick="photo.addItem()">Добави</div>
+        </form>
+        <hr />
+
+
+        Отбелязани обекти
+        <ul class="items">
+            <li id="item-window"
+                onmouseover="itemsList.onMouseOver('window')"
+                onmouseleave="itemsList.onMouseLeave('window')">
+                Прозорец
+            </li>
+            <li id="item-aircondotioner"
+                onmouseover="itemsList.onMouseOver('aircondotioner')"
+                onmouseleave="itemsList.onMouseLeave('aircondotioner')">Климатик</li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

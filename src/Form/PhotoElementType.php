@@ -27,18 +27,6 @@ class PhotoElementType extends AbstractType
                 'choice_label' => 'name',
                 'placeholder'  => '',
             ])
-            ->add('aX', NumberType::class, [
-                'scale' => 2,
-            ])
-            ->add('aY', NumberType::class, [
-                'scale' => 2,
-            ])
-            ->add('bX', NumberType::class, [
-                'scale' => 2,
-            ])
-            ->add('bY', NumberType::class, [
-                'scale' => 2,
-            ])
         ;
     }
 
