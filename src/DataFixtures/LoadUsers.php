@@ -13,7 +13,8 @@ class LoadUsers extends Fixture
     {
         $object = new User();
         $object->setUsername('arc');
-        $object->setPassword('$argon2i$v=19$m=1024,t=2,p=2$c29tZXNhbHQ$ES/eKYOOq+DhabszUX1hpIusLqiYGZUrL4PiDRiKY38'); // arc
+        // password: nas
+        $object->setPassword('$argon2i$v=19$m=1024,t=2,p=2$c29tZXNhbHQ$ES/eKYOOq+DhabszUX1hpIusLqiYGZUrL4PiDRiKY38');
         $object->setRoles(['ROLE_USER']);
         $object->setIsActive(true);
 
