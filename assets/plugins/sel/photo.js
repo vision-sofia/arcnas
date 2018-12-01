@@ -190,12 +190,6 @@ var photoCtrl = {
       $('.add-item-form .itemType .select').addClass('is-danger');
       valid = false;
     }
-  
-    let conditionVal = $('.add-item-form .itemCondition select').val();
-    if (!conditionVal) {
-      $('.add-item-form .itemCondition .select').addClass('is-danger');
-      valid = false;
-    }
     
     if (valid) {
       $('.add-item-form').submit();

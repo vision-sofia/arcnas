@@ -93,11 +93,21 @@ class PhotoController extends AbstractController
 
         $marks = $this->transform($photo->getMetadata(), $w);
 
+        $elementsCount = [];
+        foreach ($marks as $mark) {
+            if (isset($elementsCount[$mark['element_id']])) {
+                $elementsCount[$mark['element_id']] += 1;
+            } else {
+                $elementsCount[$mark['element_id']] = 1;
+            }
+        }
+
         return $this->render('photo/index.html.twig', [
             'photo'    => $photo,
             'form'     => $form->createView(),
-            'labels'   => $marks,
+            'marks'   => $marks,
             'elements' => $elements,
+            'elementsCount' => $elementsCount
         ]);
     }
 

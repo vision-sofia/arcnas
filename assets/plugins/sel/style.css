@@ -7,8 +7,20 @@
     margin: 10px 0 10px 0;
 }
 
-navbar-brand {
+.mlr10 {
+    margin: 0 10px 0 10px;
+}
+
+.navbar {
+    border-bottom: 1px solid #d8d8d8;
+}
+
+.navbar-brand a {
+    margin-left: 20px;
+    color: white;
+    font-size: 35px;
     font-family: 'Architects Daughter', cursive;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
 
@@ -66,10 +78,8 @@ navbar-brand {
 
 .photo-wrapper img {
     box-shadow: 0 0 5px rgba(0,0,0, 0.5);
-    width: 600px;
     float: left;
-    /*margin: 20px;*/
-
+    height: calc(100vh - 100px);
 }
 
 
@@ -125,7 +135,7 @@ navbar-brand {
 
 
 .items li a {
-    display: none;
+    /*display: none;*/
 }
 
 .item-color-mark {
