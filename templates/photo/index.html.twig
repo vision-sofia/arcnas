@@ -65,18 +65,16 @@
                 </p>
 
                 <ul class="menu-list">
-                    {% for element in elements %}
-                        {%   if elementsCount[element.id] is defined %}
+                    {% for element in markedElements %}
                         <li id="item-{{ element.id }}"
                             onmouseover="rectCtrl.showPassiveRects({{ element.id }})"
                             onmouseleave="rectCtrl.hidePassiveRects({{ element.id }})">
                             <a>
                                 {{ element.name }}
-                                <span class="tag is-light"> {{ elementsCount[element.id] }} </span>
-                                <span class="tag item-color-mark" style="color: {{ element.primaryColor }}">&bull;</span>
+                                <span class="tag is-light"> {{ element.count }} </span>
+                                <span class="tag item-color-mark" style="color: {{ element.color }}">&bull;</span>
                             </a>
                         </li>
-                        {% endif %}
                     {% endfor %}
                 </ul>
                 <a class="button is-text"
