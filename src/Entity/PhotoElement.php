@@ -35,6 +35,11 @@ class PhotoElement implements UuidInterface, TraceableInterface
     private $condition;
 
     /**
+     * @ORM\Column(name="sector", type="polygon_geom", nullable=true)
+     */
+    private $sector;
+
+    /**
      * @ORM\Column(type="float", scale=2, precision=4)
      */
     private $aX;
