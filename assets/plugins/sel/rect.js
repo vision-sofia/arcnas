@@ -3,8 +3,7 @@ var rectCtrl = {
     let photoWrapper = $('.photo-wrapper');
     let img = photoWrapper.find('img');
     passiveRects.forEach(r => {
-      console.log(photoCtrl.getPercents(r.topLeft.y, img.height()));
-      photoWrapper.append('<div class="rect passive-rect rect-type-' + r.type + '" style="top: ' + photoCtrl.percentsToPx(r.topLeft.y, img.height()) + 'px; left: ' + photoCtrl.percentsToPx(r.topLeft.x, img.width()) + 'px; width: ' + photoCtrl.percentsToPx(r.width, img.width()) + 'px; height: ' + photoCtrl.percentsToPx(r.height, img.height()) + 'x;"></div>');
+      photoWrapper.append('<div class="rect passive-rect rect-type-' + r.type + '" style="top: ' + photoCtrl.percentsToPx(r.topLeft.y, img.height()) + 'px; left: ' + photoCtrl.percentsToPx(r.topLeft.x, img.width()) + 'px; width: ' + photoCtrl.percentsToPx(r.width, img.width()) + 'px; height: ' + photoCtrl.percentsToPx(r.height, img.height()) + 'x; border-color: ' + itemTypes[r.type].color + '"></div>');
       itemsList.addItem(r.type);
     });
   },

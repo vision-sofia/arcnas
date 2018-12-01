@@ -55,6 +55,10 @@
            id="submit-button"
            onclick="photoCtrl.addItem()"
            disabled>Добави</a>
+        <a class="button is-light mtb10"
+           id="clear-button"
+           style="display: none"
+           onclick="photoCtrl.clearSelection()">Изчисти</a>
       </form>
       <hr />
 
@@ -86,9 +90,25 @@
 
   <script>
     var itemTypes = {
-      window: 'Прозорец',
-      airconditioner: 'Климатик'
+      window: {
+        name: 'Прозорец',
+        color: 'red'
+      },
+      airconditioner: {
+        name: 'Климатик',
+        color: 'cyan'
+      }
     };
+
+    var passiveRects = [{
+      topLeft: {
+        x: 25.22,
+        y: 55
+      },
+      width: 19.26,
+      height: 14.22,
+      type: 'window'
+    }];
   </script>
   <script src="jquery-3.3.1.min.js"></script>
   <script src="jquery-ui-1.12.1.js"></script>

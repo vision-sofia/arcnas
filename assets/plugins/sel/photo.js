@@ -38,6 +38,11 @@ var photoCtrl = {
     
     this.rect[1] = this.getCoordinates(event);
     this.drawRect(img);
+  
+    // show clear button
+    $('.add-item-form #clear-button').css({
+      display: 'inline-flex'
+    });
   },
   
   
@@ -188,10 +193,12 @@ var photoCtrl = {
     this.drawable = true;
     $('.photo-wrapper').append('<div class="rect active-rect"></div>');
   
-    // deactivate form
-    let form = $('.add-item-form');
-    form.find('input#coordinates').val('');
-    form.find('#submit-button').attr('disabled', 'disabled');
+    this.deactivateForm();
+  
+    // hide clear button
+    $('.add-item-form #clear-button').css({
+      display: 'none'
+    });
     
     // add to items list
     itemsList.addItem(selectedItemType.val());
@@ -210,7 +217,8 @@ var photoCtrl = {
     let rectId = Math.floor(Math.random() * Math.floor(10000));
     
     rectObj.css({
-      display: 'none'
+      display: 'none',
+      'border-color': itemTypes[selectedItemType.val()].color
     });
     rectObj.addClass('passive-rect');
     rectObj.removeClass('active-rect');
@@ -218,5 +226,26 @@ var photoCtrl = {
     rectObj.attr('id', 'rect-' + rectId);
     rectObj.draggable('destroy');
     rectObj.resizable('destroy');
+  },
+  
+  deactivateForm: function () {
+    // deactivate form
+    let form = $('.add-item-form');
+    form.find('input#coordinates').val('');
+    form.find('#submit-button').attr('disabled', 'disabled');
+  },
+  
+  clearSelection: function () {
+    let rectObj = $('.active-rect');
+    rectObj.css({
+      display: 'none'
+    });
+    this.drawable = true;
+    this.deactivateForm();
+  
+    // hide clear button
+    $('.add-item-form #clear-button').css({
+      display: 'none'
+    });
   }
 };
