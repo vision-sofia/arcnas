@@ -46,7 +46,7 @@
                 </div>
             </div>
 
-            <a class="button is-danger mtb10"
+            <a class="button is-warning mtb10"
                id="submit-button"
                onclick="photoCtrl.addItem()"
                disabled>Добави</a>
@@ -63,8 +63,6 @@
                 <p class="menu-label">
                     Отбелязани обекти
                 </p>
-
-
 
                 <ul class="menu-list">
                     {% for element in elements %}
@@ -88,20 +86,5 @@
             </aside>
         </div>
     </div>
-
-    <script>
-      var itemTypes = {
-
-        {% for element in elements %}
-
-        element{{ element.id }}: {
-          name: '{{ element.name }}',
-          color: 'red'
-        },
-
-        {% endfor %}
-      };
-      console.log(itemTypes);
-    </script>
 
 {% endblock %}

@@ -11,7 +11,7 @@ var rectCtrl = {
   showPassiveRects: function(rectType) {
     $('.passive-rect.rect-type-' + rectType).css({
       display:'block',
-      opacity: 1
+      opacity: 0.75
     });
   },
   hidePassiveRects: function(rectType) {
@@ -24,7 +24,7 @@ var rectCtrl = {
   showAllPassiveRects: function() {
     $('.passive-rect').css({
       display:'block',
-      opacity: 1
+      opacity: 0.75
     });
   },
   hideAllPassiveRects: function() {
