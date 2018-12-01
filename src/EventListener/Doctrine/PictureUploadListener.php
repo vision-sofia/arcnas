@@ -44,11 +44,11 @@ class PictureUploadListener
             return;
         }
 
-        if ($fileName = $entity->getImage()) {
+        if ($fileName = $entity->getFile()) {
             if (!$this->filesystem->exists($this->uploader->getTargetDirectory() . '/' . $fileName)) {
-                $entity->setImage(null);
+                $entity->setFile(null);
             } else {
-                $entity->setImage(new File($this->uploader->getTargetDirectory() . '/' . $fileName));
+                $entity->setFile(new File($this->uploader->getTargetDirectory() . '/' . $fileName));
             }
         }
     }
@@ -63,7 +63,7 @@ class PictureUploadListener
         /** @var UploadableFileInterface $entity */
         $file = $entity->getFile();
 
-        if ($file instanceof UploadedFile) {
+        if ($file instanceof UploadedFile && !$this->filesystem->exists($this->uploader->getTargetDirectory() . '/' . $file->getFilename())) {
             $fileName = $this->uploader->upload($file);
 
             $entity->setFile($fileName);

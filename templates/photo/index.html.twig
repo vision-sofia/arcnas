@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <img src="/media/{{ photo.file.filename }}" width="800">
+
+    {{ form_start(form) }}
+    <button type="submit">Добави</button>
+    {{ form_end(form) }}
+{% endblock %}

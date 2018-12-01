@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-index
+    {% for photo in photos %}
+        <a href="{{ path('app.photo', {'uuid': photo.uuid}) }}">Image</a>
+    {% endfor %}
 {% endblock %}
