@@ -1,7 +1,12 @@
-body {
+.body {
     margin: 0;
     padding: 0;
 }
+
+.mtb10 {
+    margin: 10px 0 10px 0;
+}
+
 
 .body-wrapper {
     position: absolute;
@@ -112,6 +117,6 @@ body {
 }
 
 
-.items li#item-1:hover ~ .passive-rect#rect-1 {
-    opacity: 1;
+.items li a {
+    /*visibility: hidden;*/
 }
