@@ -42,33 +42,36 @@ var photo = {
     if (!this.drawable) {
       return;
     }
-    
     let rectObj = $('.active-rect');
+  
+    let onStopDragResize = function(event, ui) {
+      rectCoordinates = {
+        topLeft: {
+          x: ui.position.left,
+          y: ui.position.top
+        },
+        bottomRight: {
+          x: ui.position.left + rectObj.width(),
+          y: ui.position.top + rectObj.height()
+        },
+        width: rectObj.width(),
+        height: rectObj.height()
+      };
+      let form = $('.add-item-form');
+      form.find('input#coordinates').val(self.getListOfCoordinates());
+    };
+    
     rectObj.css({
       cursor: 'pointer'
     });
-    // rectObj.resizable();
+    rectObj.resizable({
+      containment: "parent",
+      stop: onStopDragResize
+    });
     rectObj.draggable({
       containment: "parent",
-      stop: function (event, ui) {
-        rectCoordinates = {
-          topLeft: {
-            x: ui.position.left,
-            y: ui.position.top
-          },
-          bottomRight: {
-            x: ui.position.left + rectObj.width(),
-            y: ui.position.top + rectObj.height()
-          },
-          width: rectObj.width(),
-          height: rectObj.height()
-        };
-        console.log(rectCoordinates);
-        let form = $('.add-item-form');
-        form.find('input[name="coordinates"]').val(self.getListOfCoordinates());
-      }
+      stop: onStopDragResize
     });
-    
   
     rectCoordinates = {
       topLeft: {
@@ -82,17 +85,15 @@ var photo = {
       width: rectObj.width(),
       height: rectObj.height()
     };
-    console.log(rectCoordinates);
   
     this.negativeCoordinates = false;
     this.drawable = false;
     
     // activate form
     let form = $('.add-item-form');
-    form.find('input[name="coordinates"]').val(this.getListOfCoordinates());
+    form.find('input#coordinates').val(this.getListOfCoordinates());
     form.find('#submit-button').removeAttr('disabled');
   },
-  
   
   
   drawRect: function(img) {
@@ -167,7 +168,7 @@ var photo = {
   
   addItem: function () {
     console.log(100, this.getListOfCoordinates());
-    let selectedItemType = $('.add-item-form select[name="itemType"]');
+    let selectedItemType = $('.add-item-form select#itemType');
   
     this.makePassive(selectedItemType);
   
@@ -177,7 +178,7 @@ var photo = {
   
     // deactivate form
     let form = $('.add-item-form');
-    form.find('input[name="coordinates"]').val('');
+    form.find('input#coordinates').val('');
     form.find('#submit-button').attr('disabled', 'disabled');
     
     // add to items list
@@ -186,7 +187,8 @@ var photo = {
       visibility: 'visible'
     });
     let countOfItemsOfThisType = $('.passive-rect.rect-type-' + selectedItemType.val()).length;
-    itemsList.find('li#item-' + selectedItemType.val()).text(selectedItemType.find('option:selected').text() + ' (' + countOfItemsOfThisType + ')');
+    itemsList.find('li#item-' + selectedItemType.val() + ' a').html(
+      selectedItemType.find('option:selected').text() + '  <span class="tag is-light">' + countOfItemsOfThisType + '</span>');
   },
   
   getListOfCoordinates: function () {
@@ -209,5 +211,6 @@ var photo = {
     rectObj.addClass('rect-type-' + selectedItemType.val());
     rectObj.attr('id', 'rect-' + rectId);
     rectObj.draggable('destroy');
+    rectObj.resizable('destroy');
   }
 };

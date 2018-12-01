@@ -4,11 +4,8 @@
   <meta charset="UTF-8">
   <title>Title</title>
   <link rel="stylesheet" type="text/css" href="style.css">
-  <script src="jquery-3.3.1.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src="underscore-1.9.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css"/>
   <script src="photo.js"></script>
-  <!--<script src="rect.js"></script>-->
   <script src="itemsList.js"></script>
   <script src="app.js"></script>
 
@@ -40,13 +37,13 @@
     <div class="action-panel">
 
       <form class="add-item-form">
-        <input type="text" name="coordinates" value="" />
+        <input type="text" hidden name="coordinates" id="coordinates" value="" />
 
         <div class="itemType">
           <label class="label">Тип на обекта</label>
           <div class="control">
             <div class="select">
-              <select name="itemType">
+              <select name="itemType" id="itemType">
                 <option value="window">Прозорец</option>
                 <option value="aircondotioner">Климатик</option>
               </select>
@@ -70,6 +67,7 @@
               onmouseover="itemsList.onMouseOver('window')"
               onmouseleave="itemsList.onMouseLeave('window')">
             <a>Прозорец</a>
+
           </li>
           <li id="item-aircondotioner"
               onmouseover="itemsList.onMouseOver('aircondotioner')"
@@ -81,5 +79,9 @@
     </div>
   </div>
 
+
+
+  <script src="jquery-3.3.1.min.js"></script>
+  <script src="jquery-ui-1.12.1.js"></script>
 </body>
 </html>
