@@ -8,6 +8,7 @@ use App\Entity\ConfigurationList\Element;
 use App\Entity\PhotoElement;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,18 +28,10 @@ class PhotoElementType extends AbstractType
                 'choice_label' => 'name',
                 'placeholder'  => '',
             ])
-            ->add('aX', NumberType::class, [
-                'scale' => 2,
+            ->add('coordinates', HiddenType::class, [
+                'mapped' => false
             ])
-            ->add('aY', NumberType::class, [
-                'scale' => 2,
-            ])
-            ->add('bX', NumberType::class, [
-                'scale' => 2,
-            ])
-            ->add('bY', NumberType::class, [
-                'scale' => 2,
-            ])
+
         ;
     }
 
