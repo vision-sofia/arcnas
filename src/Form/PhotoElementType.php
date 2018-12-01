@@ -6,6 +6,7 @@ namespace App\Form;
 use App\Entity\ConfigurationList\Condition;
 use App\Entity\ConfigurationList\Element;
 use App\Entity\PhotoElement;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -21,6 +22,10 @@ class PhotoElementType extends AbstractType
                 'class'        => Element::class,
                 'choice_label' => 'name',
                 'placeholder'  => '',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                              ->orderBy('u.name', 'ASC');
+                },
             ])
             ->add('condition', EntityType::class, [
                 'class'        => Condition::class,
