@@ -1,4 +1,5 @@
 var itemsList = {
+  
   onMouseOver: function(rectType) {
     $('.passive-rect.rect-type-' + rectType).css({
       display:'block',
@@ -10,5 +11,15 @@ var itemsList = {
       display: 'none',
       // opacity: 0.5
     });
+  },
+  
+  addItem: function (itemType) {
+    let itemsList = $('.items');
+    itemsList.find('li#item-' + itemType + ' a').css({
+      display: 'block'
+    });
+    let countOfItemsOfThisType = $('.passive-rect.rect-type-' + itemType).length;
+    itemsList.find('li#item-' + itemType + ' a').html(
+      itemTypes[itemType] + ' <span class="tag is-light">' + countOfItemsOfThisType + '</span> <span>&bull;</span>');
   }
 };

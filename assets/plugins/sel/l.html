@@ -6,6 +6,7 @@
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.1/themes/base/jquery-ui.css"/>
   <script src="photo.js"></script>
+  <script src="rect.js"></script>
   <script src="itemsList.js"></script>
   <script src="app.js"></script>
 
@@ -18,15 +19,14 @@
   <div class="body-wrapper">
     <div class="photo-panel">
       <div class="photo-panel-position-wrapper">
-
         <div class="photo-wrapper">
 
           <img src="DSC03348.JPG"
                onclick="console.log(photo)"
-               onmousedown="photo.onMouseDown(event, this)"
-               ondrag="photo.onDrag(event, this)"
-               ondragend="photo.onMouseUp(event, this)"
-               onload="photo.onLoad()"
+               onmousedown="photoCtrl.onMouseDown(event, this)"
+               ondrag="photoCtrl.onDrag(event, this)"
+               ondragend="photoCtrl.onMouseUp(event, this)"
+               onload="photoCtrl.onLoad()"
                alt="" />
 
           <div class="rect active-rect"></div>
@@ -45,7 +45,7 @@
             <div class="select">
               <select name="itemType" id="itemType">
                 <option value="window">Прозорец</option>
-                <option value="aircondotioner">Климатик</option>
+                <option value="airconditioner">Климатик</option>
               </select>
             </div>
           </div>
@@ -53,7 +53,7 @@
 
         <a class="button is-link mtb10"
            id="submit-button"
-           onclick="photo.addItem()"
+           onclick="photoCtrl.addItem()"
            disabled>Добави</a>
       </form>
       <hr />
@@ -64,23 +64,32 @@
         </p>
         <ul class="menu-list">
           <li id="item-window"
-              onmouseover="itemsList.onMouseOver('window')"
-              onmouseleave="itemsList.onMouseLeave('window')">
+              onmouseover="rectCtrl.showPassiveRects('window')"
+              onmouseleave="rectCtrl.hidePassiveRects('window')">
             <a>Прозорец</a>
-
           </li>
-          <li id="item-aircondotioner"
-              onmouseover="itemsList.onMouseOver('aircondotioner')"
-              onmouseleave="itemsList.onMouseLeave('aircondotioner')">
+          <li id="item-airconditioner"
+              onmouseover="rectCtrl.showPassiveRects('airconditioner')"
+              onmouseleave="rectCtrl.hidePassiveRects('airconditioner')">
             <a>Климатик</a>
           </li>
         </ul>
+        <a class="button is-text"
+           onmouseover="rectCtrl.showAllPassiveRects()"
+           onmouseleave="rectCtrl.hideAllPassiveRects()">Покажи всички</a>
+
       </aside>
     </div>
   </div>
 
 
 
+  <script>
+    var itemTypes = {
+      window: 'Прозорец',
+      airconditioner: 'Климатик'
+    };
+  </script>
   <script src="jquery-3.3.1.min.js"></script>
   <script src="jquery-ui-1.12.1.js"></script>
 </body>

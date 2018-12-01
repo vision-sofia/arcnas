@@ -120,5 +120,5 @@
 
 
 .items li a {
-    visibility: hidden;
+    display: none;
 }
