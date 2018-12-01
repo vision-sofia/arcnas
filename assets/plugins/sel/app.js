@@ -1,5 +1,5 @@
 var activeRectCoordinates = null;
 
 window.onload = function () {
-  rectCtrl.drawPassiveRects(passiveRects);
+  // rectCtrl.drawPassiveRects(passiveRects);
 };

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\ConfigurationList\Element;
 use App\Entity\Photo;
 use App\Entity\PhotoElement;
 use App\Event\Events;
@@ -79,10 +80,15 @@ class PhotoController extends AbstractController
 
         $labels = $this->transform($photo->getMetadata());
 
+
+        $elements = $this->getDoctrine()->getRepository(Element::class)->findAll();
+
+
         return $this->render('photo/index.html.twig', [
             'photo' => $photo,
             'form' => $form->createView(),
             'labels' => $labels,
+            'elements' => $elements
         ]);
     }
 
@@ -90,16 +96,18 @@ class PhotoController extends AbstractController
     {
         $result = [];
 
-        foreach ($metadata['sectors'] as $k => $v) {
-            $v['geo'] = json_decode($v['geo'], true);
-            $v['position'] = [
-                'top' => $v['geo']['coordinates'][0][0][1],
-                'left' => $v['geo']['coordinates'][0][0][0],
-                'width' => $v['geo']['coordinates'][0][2][0] - $v['geo']['coordinates'][0][0][0],
-                'height' => $v['geo']['coordinates'][0][2][1] - $v['geo']['coordinates'][0][0][1],
-            ];
+        if (!empty($metadata['sectors'])) {
+            foreach ($metadata['sectors'] as $k => $v) {
+                $v['geo'] = json_decode($v['geo'], true);
+                $v['position'] = [
+                    'top' => $v['geo']['coordinates'][0][0][1],
+                    'left' => $v['geo']['coordinates'][0][0][0],
+                    'width' => $v['geo']['coordinates'][0][2][0] - $v['geo']['coordinates'][0][0][0],
+                    'height' => $v['geo']['coordinates'][0][2][1] - $v['geo']['coordinates'][0][0][1],
+                ];
 
-            $result[] = $v;
+                $result[] = $v;
+            }
         }
 
         return $result;

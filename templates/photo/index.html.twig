@@ -1,106 +1,101 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1 class="mt-4 mb-3">Индекс на снимка</h1>
 
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            Начало
-        </li>
-    </ol>
-
-    <div class="row">
-        <div class="col-lg-9">
-
+    <div class="body-wrapper">
+        <div class="photo-panel">
             <div class="photo-panel-position-wrapper">
                 <div class="photo-wrapper">
                     <img src="/media/{{ photo.file }}"
-                         onclick="console.log(photo)"
                          onmousedown="photoCtrl.onMouseDown(event, this)"
                          ondrag="photoCtrl.onDrag(event, this)"
                          ondragend="photoCtrl.onMouseUp(event, this)"
                          onload="photoCtrl.onLoad()"
                          alt="" />
 
+                    {% for label in labels %}
+                    <div class="rect passive-rect rect-type-' + r.type + '" style="top: {{ label.position.top }}%; left: {{ label.position.left }}%; width: {{ label.position.width }}%; height: {{ label.position.height }}%; border-color: red"></div>
+                    {% endfor %}
+
                     <div class="rect active-rect"></div>
                 </div>
             </div>
 
-
-            {#
-            <div class="action-panel">
-
-                    <form class="add-item-form">
-                        <input type="text" hidden name="coordinates" id="coordinates" value="" />
-
-                        <div class="itemType">
-                            <label class="label">Тип на обекта</label>
-                            <div class="control">
-                                <div class="select">
-                                    <select name="itemType" id="itemType">
-                                        <option value="window">Прозорец</option>
-                                        <option value="airconditioner">Климатик</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <a class="button is-link mtb10"
-                           id="submit-button"
-                           onclick="photoCtrl.addItem()"
-                           disabled>Добави</a>
-                    </form>
-                    <hr />
-
-                    <aside class="menu items">
-                        <p class="menu-label">
-                            Отбелязани обекти
-                        </p>
-                        <ul class="menu-list">
-                            <li id="item-window"
-                                onmouseover="rectCtrl.showPassiveRects('window')"
-                                onmouseleave="rectCtrl.hidePassiveRects('window')">
-                                <a>Прозорец</a>
-                            </li>
-                            <li id="item-airconditioner"
-                                onmouseover="rectCtrl.showPassiveRects('airconditioner')"
-                                onmouseleave="rectCtrl.hidePassiveRects('airconditioner')">
-                                <a>Климатик</a>
-                            </li>
-                        </ul>
-                        <a class="button is-text"
-                           onmouseover="rectCtrl.showAllPassiveRects()"
-                           onmouseleave="rectCtrl.hideAllPassiveRects()">Покажи всички</a>
-
-                    </aside>
-                </div>
-                #}
-
-
         </div>
-        <div class="col-lg-3">
+        <div class="action-panel">
+
             {{ form_start(form, {'attr': {'class': 'g-py-15 add-item-form', 'novalidate': 'novalidate'}}) }}
 
-            {{ form_widget(form.coordinates, {'id': 'coordinates'}) }}
+            {{ form_widget(form.coordinates, {'id': 'coordinates', 'attr': { 'hidden': 'hidden'}}) }}
 
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Състояние</label>
-                <div class="col-sm-8">
-                    {{ form_widget(form.condition, {'attr': {'class': 'form-control'}}) }}
+            <div class="itemType">
+                <label class="label">Тип на обекта</label>
+                <div class="control">
+                    <div class="select">
+                        {{ form_widget(form.element, {'attr': {'class': 'form-control'}}) }}
+                    </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Елемент</label>
-                <div class="col-sm-8">
-                    {{ form_widget(form.element, {'attr': {'class': 'form-control'}}) }}
+
+            <div class="itemCondition">
+                <label class="label">Състояние</label>
+                <div class="control">
+                    <div class="select">
+                        {{ form_widget(form.condition, {'attr': {'class': 'form-control'}}) }}
+                    </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-sm-8 offset-4">
-                    <button type="submit" class="btn btn-primary">Вход</button>
-                </div>
-            </div>
+
+            <a class="button is-link mtb10"
+               id="submit-button"
+               onclick="photoCtrl.addItem()"
+               disabled>Добави</a>
+            <a class="button is-light mtb10"
+               id="clear-button"
+               style="display: none"
+               onclick="photoCtrl.clearSelection()">Изчисти</a>
+
             {{ form_end(form) }}
+
+            <hr />
+
+            <aside class="menu items">
+                <p class="menu-label">
+                    Отбелязани обекти
+                </p>
+                <ul class="menu-list">
+                    <li id="item-window"
+                        onmouseover="rectCtrl.showPassiveRects('window')"
+                        onmouseleave="rectCtrl.hidePassiveRects('window')">
+                        <a>Прозорец</a>
+                    </li>
+                    <li id="item-airconditioner"
+                        onmouseover="rectCtrl.showPassiveRects('airconditioner')"
+                        onmouseleave="rectCtrl.hidePassiveRects('airconditioner')">
+                        <a>Климатик</a>
+                    </li>
+                </ul>
+                <a class="button is-text"
+                   onmouseover="rectCtrl.showAllPassiveRects()"
+                   onmouseleave="rectCtrl.hideAllPassiveRects()">Покажи всички</a>
+
+            </aside>
         </div>
     </div>
+
+    <script>
+      var itemTypes = {
+
+        {% for element in elements %}
+
+        element{{ element.id }}: {
+          name: '{{ element.name }}',
+          color: 'red'
+        },
+
+        {% endfor %}
+      };
+      console.log(itemTypes);
+    </script>
+
 {% endblock %}
