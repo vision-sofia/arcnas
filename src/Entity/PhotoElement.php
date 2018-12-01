@@ -39,7 +39,6 @@ class PhotoElement implements UuidInterface, TraceableInterface
      */
     private $sector;
 
-
     public function getId(): ?int
     {
         return $this->id;
@@ -64,4 +63,22 @@ class PhotoElement implements UuidInterface, TraceableInterface
     {
         $this->condition = $condition;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSector()
+    {
+        return $this->sector;
+    }
+
+    /**
+     * @param mixed $sector
+     */
+    public function setSector($sector): void
+    {
+        $this->sector = $sector;
+    }
+
+
 }
