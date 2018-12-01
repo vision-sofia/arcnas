@@ -58,7 +58,7 @@ var photo = {
         height: rectObj.height()
       };
       let form = $('.add-item-form');
-      form.find('input[name="coordinates"]').val(self.getListOfCoordinates());
+      form.find('input#coordinates').val(self.getListOfCoordinates());
     };
     
     rectObj.css({
@@ -91,7 +91,7 @@ var photo = {
     
     // activate form
     let form = $('.add-item-form');
-    form.find('input[name="coordinates"]').val(this.getListOfCoordinates());
+    form.find('input#coordinates').val(this.getListOfCoordinates());
     form.find('#submit-button').removeAttr('disabled');
   },
   
@@ -168,7 +168,7 @@ var photo = {
   
   addItem: function () {
     console.log(100, this.getListOfCoordinates());
-    let selectedItemType = $('.add-item-form select[name="itemType"]');
+    let selectedItemType = $('.add-item-form select#itemType');
   
     this.makePassive(selectedItemType);
   
@@ -178,7 +178,7 @@ var photo = {
   
     // deactivate form
     let form = $('.add-item-form');
-    form.find('input[name="coordinates"]').val('');
+    form.find('input#coordinates').val('');
     form.find('#submit-button').attr('disabled', 'disabled');
     
     // add to items list
