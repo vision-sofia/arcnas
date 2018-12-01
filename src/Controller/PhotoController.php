@@ -37,14 +37,17 @@ class PhotoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
             $em->detach($photo);
 
             $em->persist($photoElement);
             $em->flush();
 
-            $event = new PhotoElementTouchEvent($photoElement, '');
-            $this->eventDispatcher->dispatch(Events::PHOTO_ELEMENT_INSERT, $event);
+            $coordinates = $form->get('coordinates')->getData();
+
+            if ($coordinates) {
+                $event = new PhotoElementTouchEvent($photoElement, $coordinates);
+                $this->eventDispatcher->dispatch(Events::PHOTO_ELEMENT_INSERT, $event);
+            }
 
             return $this->redirectToRoute('app.photo', [
                 'uuid' => $photo->getUuid(),
