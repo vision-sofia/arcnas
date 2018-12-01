@@ -28,6 +28,11 @@ class Photo implements UuidInterface, TraceableInterface, UploadableFileInterfac
      */
     private $file;
 
+    /**
+     * @ORM\Column(name="coordinates", type="point_geog", nullable=true)
+     */
+    private $coordinates;
+
     public function getId(): ?int
     {
         return $this->id;

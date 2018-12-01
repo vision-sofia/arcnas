@@ -6,6 +6,15 @@ doctrine:
         driver: pdo_pgsql
         charset: utf8
         url: '%env(resolve:DATABASE_URL)%'
+        types:
+            geometry:   CrEOF\Spatial\DBAL\Types\GeometryType
+            geography:  CrEOF\Spatial\DBAL\Types\GeographyType
+            point_geog:      CrEOF\Spatial\DBAL\Types\Geography\PointType
+            polygon_geom:    CrEOF\Spatial\DBAL\Types\Geometry\PolygonType
+
+        #mapping_types:
+        #    point_geog: point_geog
+        #    polygon_geom: polygon_geom
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
