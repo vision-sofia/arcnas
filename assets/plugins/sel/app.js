@@ -5,8 +5,13 @@ window.onload = function () {
 };
 
 
-var loginCtrl = {
-  login: function () {
+var userCtrl = {
+  
+  signIn: function () {
     $('.login-form').submit();
+  },
+  
+  signUp: function () {
+    $('.register-form').submit();
   }
 };
