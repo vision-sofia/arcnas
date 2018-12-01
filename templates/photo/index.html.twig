@@ -11,24 +11,25 @@
 
     <div class="row">
         <div class="col-lg-9">
-            <div class="photo-wrapper">
-                <img src="/media/{{ photo.file.filename }}"
-                     onclick="console.log(photo)"
-                     onmousedown="photo.onMouseDown(event, this)"
-                     ondrag="photo.onDrag(event, this)"
-                     ondragend="photo.onMouseUp(event, this)"
-                     onload="photo.onLoad()"
-                     alt="" />
-                <div class="rect active-rect"></div>
-                <div style=" clear: both;"></div>
+            <div class="photo-panel">
+                <div class="photo-wrapper">
+                    <img src="/media/{{ photo.file }}"
+                         onclick="console.log(photo)"
+                         onmousedown="photo.onMouseDown(event, this)"
+                         ondrag="photo.onDrag(event, this)"
+                         ondragend="photo.onMouseUp(event, this)"
+                         onload="photo.onLoad()"
+                         alt="" />
+                    <div class="rect active-rect"></div>
+                    <div style=" clear: both;"></div>
+                </div>
             </div>
         </div>
         <div class="col-lg-3">
             {{ form_start(form, {'attr': {'class': 'g-py-15 add-item-form', 'novalidate': 'novalidate'}}) }}
 
-            {{ form_widget(form.coordinates) }}
+            {{ form_widget(form.coordinates, {'id': 'coordinates'}) }}
 
-            <input type="text" name="coordinates" value="" />
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Състояние</label>
                 <div class="col-sm-8">

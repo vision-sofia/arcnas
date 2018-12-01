@@ -48,7 +48,8 @@ class PictureUploadListener
             if (!$this->filesystem->exists($this->uploader->getTargetDirectory() . '/' . $fileName)) {
                 $entity->setFile(null);
             } else {
-                $entity->setFile(new File($this->uploader->getTargetDirectory() . '/' . $fileName));
+              #  $entity->setFile(new File($this->uploader->getTargetDirectory() . '/' . $fileName));
+                $entity->setFile($fileName);
             }
         }
     }
