@@ -26,6 +26,11 @@ class Element implements UuidInterface
      */
     private $name;
 
+    /**
+     * @ORM\Column(type="string", length=7, nullable=true)
+     */
+    private $primaryColor;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -39,5 +44,15 @@ class Element implements UuidInterface
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getPrimaryColor()
+    {
+        return $this->primaryColor;
+    }
+
+    public function setPrimaryColor($primaryColor): void
+    {
+        $this->primaryColor = $primaryColor;
     }
 }

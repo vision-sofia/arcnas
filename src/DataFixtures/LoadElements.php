@@ -13,7 +13,8 @@ class LoadElements extends Fixture
     {
         foreach ($this->data() as $item) {
             $object = new Element();
-            $object->setName($item);
+            $object->setName($item[0]);
+            $object->setPrimaryColor($item[1]);
 
             $manager->persist($object);
         }
@@ -24,13 +25,18 @@ class LoadElements extends Fixture
     private function data(): array
     {
         return [
-            'Улук',
-            'Фриз',
-            'Фонтон',
-            'Корниз',
-            'Кронщайн',
-            'Неостъклен  балкон',
-            'Остъклен  балкон',
+            ['Улук', '#FFFF00'],
+            ['Фонтон', '#FFFF00'],
+            ['Корниз', '#FFFF00'],
+            ['Кронщайн', '#FFFF00'],
+            ['Неостъклен балкон', '#0000FF'],
+            ['Остъклен балкон', '#F000F'],
+            ['Фасада', '#FF0000'],
+            ['Климатик', '#00FF00'],
+            ['Колона', '#00FF00'],
+            ['Врата', '#00FF00'],
+            ['Прозорец', '#00FF00'],
+            ['Саниране', '#00FF00'],
         ];
     }
 }
