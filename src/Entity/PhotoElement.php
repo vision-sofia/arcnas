@@ -39,6 +39,14 @@ class PhotoElement implements UuidInterface, TraceableInterface
      */
     private $sector;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Photo")
+     * @ORM\JoinColumn(referencedColumnName="id", name="photo_id", nullable=false)
+     */
+    private $photo;
+
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -79,6 +87,24 @@ class PhotoElement implements UuidInterface, TraceableInterface
     {
         $this->sector = $sector;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    /**
+     * @param mixed $photo
+     */
+    public function setPhoto($photo): void
+    {
+        $this->photo = $photo;
+    }
+
+
 
 
 }
