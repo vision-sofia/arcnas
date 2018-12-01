@@ -7,7 +7,6 @@ use App\Entity\PhotoElement;
 use App\Event\Events;
 use App\Event\PhotoElementTouchEvent;
 use App\Form\PhotoElementType;
-use Doctrine\DBAL\Driver\Connection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -24,7 +23,6 @@ class PhotoController extends AbstractController
         $this->eventDispatcher = $eventDispatcher;
     }
 
-
     /**
      * @Route("/photos/{uuid}", name="app.photo", requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"})
      * @ParamConverter("photo", class="App\Entity\Photo", options={"mapping": {"uuid": "uuid"}})
@@ -39,7 +37,7 @@ class PhotoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-         #   $em->detach($photo);
+            //   $em->detach($photo);
 
             $em->persist($photoElement);
             $em->flush();
@@ -52,9 +50,9 @@ class PhotoController extends AbstractController
             $i = 0;
 
             foreach ($ex as $coord) {
-                $i++;
+                ++$i;
 
-                if ($i % 2 == 0) {
+                if (0 === $i % 2) {
                     $coord .= ',';
                 }
 
@@ -65,7 +63,7 @@ class PhotoController extends AbstractController
             $z[] = $z[1];
 
             $w = implode(' ', $z);
-            $w = rtrim($w,',');
+            $w = rtrim($w, ',');
 
             if ($coordinates) {
                 $event = new PhotoElementTouchEvent($photoElement, $w);
@@ -79,10 +77,31 @@ class PhotoController extends AbstractController
             ]);
         }
 
+        $labels = $this->transform($photo->getMetadata());
 
         return $this->render('photo/index.html.twig', [
             'photo' => $photo,
-            'form'  => $form->createView(),
+            'form' => $form->createView(),
+            'labels' => $labels,
         ]);
+    }
+
+    public function transform(array $metadata): array
+    {
+        $result = [];
+
+        foreach ($metadata['sectors'] as $k => $v) {
+            $v['geo'] = json_decode($v['geo'], true);
+            $v['position'] = [
+                'top' => $v['geo']['coordinates'][0][0][1],
+                'left' => $v['geo']['coordinates'][0][0][0],
+                'width' => $v['geo']['coordinates'][0][2][0] - $v['geo']['coordinates'][0][0][0],
+                'height' => $v['geo']['coordinates'][0][2][1] - $v['geo']['coordinates'][0][0][1],
+            ];
+
+            $result[] = $v;
+        }
+
+        return $result;
     }
 }
