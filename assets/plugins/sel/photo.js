@@ -38,6 +38,7 @@ var photo = {
   
   
   onMouseUp: function(event, img) {
+    let self = this;
     if (!this.drawable) {
       return;
     }
@@ -63,6 +64,8 @@ var photo = {
           height: rectObj.height()
         };
         console.log(rectCoordinates);
+        let form = $('.add-item-form');
+        form.find('input[name="coordinates"]').val(self.getListOfCoordinates());
       }
     });
     
@@ -83,6 +86,11 @@ var photo = {
   
     this.negativeCoordinates = false;
     this.drawable = false;
+    
+    // activate form
+    let form = $('.add-item-form');
+    form.find('input[name="coordinates"]').val(this.getListOfCoordinates());
+    form.find('#submit-button').removeAttr('disabled');
   },
   
   
@@ -159,21 +167,38 @@ var photo = {
   
   addItem: function () {
     console.log(100, this.getListOfCoordinates());
+    let selectedItemType = $('.add-item-form select[name="itemType"]');
+  
+    this.makePassive(selectedItemType);
+  
+    // create new active rect
+    this.drawable = true;
+    $('.photo-wrapper').append('<div class="rect active-rect"></div>');
+  
+    // deactivate form
+    let form = $('.add-item-form');
+    form.find('input[name="coordinates"]').val('');
+    form.find('#submit-button').attr('disabled', 'disabled');
     
-    this.makePassive();
+    // add to items list
+    let itemsList = $('.items');
+    itemsList.find('li#item-' + selectedItemType.val() + ' a').css({
+      visibility: 'visible'
+    });
+    let countOfItemsOfThisType = $('.passive-rect.rect-type-' + selectedItemType.val()).length;
+    itemsList.find('li#item-' + selectedItemType.val()).text(selectedItemType.find('option:selected').text() + ' (' + countOfItemsOfThisType + ')');
   },
   
   getListOfCoordinates: function () {
     let img = $('img');
-    return this.getPercents(rectCoordinates.topLeft.x, img.width()) + ', ' + this.getPercents(rectCoordinates.topLeft.y, img.height()) + ', ' + // top left
-      this.getPercents(rectCoordinates.topLeft.x + rectCoordinates.width, img.width()) + ', ' + this.getPercents(rectCoordinates.topLeft.y, img.height()) + ', ' + // top right
-      this.getPercents(rectCoordinates.topLeft.x + rectCoordinates.width, img.width()) + ', ' + this.getPercents(rectCoordinates.topLeft.y + rectCoordinates.height, img.height()) + ', ' + // bottom right
-      this.getPercents(rectCoordinates.topLeft.x, img.width()) + ', ' + this.getPercents(rectCoordinates.topLeft.y + rectCoordinates.height, img.height()); // bottom left
+    return this.getPercents(rectCoordinates.topLeft.x, img.width()) + ',' + this.getPercents(rectCoordinates.topLeft.y, img.height()) + ',' + // top left
+      this.getPercents(rectCoordinates.topLeft.x + rectCoordinates.width, img.width()) + ',' + this.getPercents(rectCoordinates.topLeft.y, img.height()) + ',' + // top right
+      this.getPercents(rectCoordinates.topLeft.x + rectCoordinates.width, img.width()) + ',' + this.getPercents(rectCoordinates.topLeft.y + rectCoordinates.height, img.height()) + ',' + // bottom right
+      this.getPercents(rectCoordinates.topLeft.x, img.width()) + ',' + this.getPercents(rectCoordinates.topLeft.y + rectCoordinates.height, img.height()); // bottom left
   },
   
-  makePassive: function () {
+  makePassive: function (selectedItemType) {
     let rectObj = $('.active-rect');
-    let selectedItemType = $('.add-item-form select[name="itemType"]');
     let rectId = Math.floor(Math.random() * Math.floor(10000));
     
     rectObj.css({
@@ -184,14 +209,5 @@ var photo = {
     rectObj.addClass('rect-type-' + selectedItemType.val());
     rectObj.attr('id', 'rect-' + rectId);
     rectObj.draggable('destroy');
-
-    rectObj.find('.label').text(selectedItemType.text());
-    rectObj.find('.label').attr('title', selectedItemType.text());
-    
-    // create new active rect
-    this.drawable = true;
-    $('.photo-wrapper').append('<div class="rect active-rect"><span class="label" title=""></span></div>');
-    
-    
   }
 };
