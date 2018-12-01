@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\ConfigurationList;
 
 use App\Entity\Traits\UUIDableTrait;
+use App\Entity\UuidInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="element", schema="configuration_list")
+ * @ORM\Table(name="condition", schema="configuration_list")
  */
-class Element implements UuidInterface
+class Condition implements UuidInterface
 {
     use UUIDableTrait;
 

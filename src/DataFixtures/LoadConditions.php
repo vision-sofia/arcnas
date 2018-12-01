@@ -7,7 +7,7 @@ use App\Entity\ConfigurationList\Element;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadElements extends Fixture
+class LoadConditions extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
@@ -24,11 +24,10 @@ class LoadElements extends Fixture
     private function data(): array
     {
         return [
-            'Улук',
-            'Фриз',
-            'Фонтон',
-            'Корниз',
-            'Кронщайн',
+            'Лошо',
+            'Задоволително',
+            'Добро',
+            'Отлично',
         ];
     }
 }
