@@ -11,8 +11,12 @@
 
     <div class="row">
         <div class="col-lg-9">
-            <div class="photo-panel">
+
+            <div class="body-wrapper">
+
+
                 <div class="photo-wrapper">
+
                     <img src="/media/{{ photo.file.filename }}"
                          onclick="console.log(photo)"
                          onmousedown="photo.onMouseDown(event, this)"
@@ -21,16 +25,18 @@
                          onload="photo.onLoad()"
                          alt="" />
 
-                    <div class="rect active-rect">
-                        <span class="label" title="Климатик и прозорец"></span>
-                    </div>
+                    <div class="rect active-rect"></div>
+
                     <div style=" clear: both;"></div>
                 </div>
+
+
             </div>
 
         </div>
         <div class="col-lg-3">
-            {{ form_start(form, {'attr': {'class': 'g-py-15'}}) }}
+            {{ form_start(form, {'attr': {'class': 'g-py-15 add-item-form'}}) }}
+            <input type="text" name="coordinates" value="" />
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Състояние</label>
                 <div class="col-sm-8">
@@ -51,22 +57,4 @@
             {{ form_end(form) }}
         </div>
     </div>
-
-    {#<img src="/media/{{ photo.file.filename }}" width="800">#}
-    {#<div class="action-panel">
-
-
-        Отбелязани обекти
-        <ul class="items">
-            <li id="item-window"
-                onmouseover="itemsList.onMouseOver('window')"
-                onmouseleave="itemsList.onMouseLeave('window')">
-                Прозорец
-            </li>
-            <li id="item-aircondotioner"
-                onmouseover="itemsList.onMouseOver('aircondotioner')"
-                onmouseleave="itemsList.onMouseLeave('aircondotioner')">Климатик</li>
-        </ul>
-    </div>#}
-
 {% endblock %}

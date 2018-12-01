@@ -39,69 +39,10 @@ class PhotoElement implements UuidInterface, TraceableInterface
      */
     private $sector;
 
-    /**
-     * @ORM\Column(type="float", scale=2, precision=4)
-     */
-    private $aX;
-
-    /**
-     * @ORM\Column(type="float", scale=2, precision=4)
-     */
-    private $aY;
-
-    /**
-     * @ORM\Column(type="float", scale=2, precision=4)
-     */
-    private $bX;
-
-    /**
-     * @ORM\Column(type="float", scale=2, precision=4)
-     */
-    private $bY;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getAX()
-    {
-        return $this->aX;
-    }
-
-    public function setAX(?float $aX): void
-    {
-        $this->aX = $aX;
-    }
-
-    public function getAY()
-    {
-        return $this->aY;
-    }
-
-    public function setAY(?float $aY): void
-    {
-        $this->aY = $aY;
-    }
-
-    public function getBX()
-    {
-        return $this->bX;
-    }
-
-    public function setBX(?float $bX): void
-    {
-        $this->bX = $bX;
-    }
-
-    public function getBY()
-    {
-        return $this->bY;
-    }
-
-    public function setBY(?float $bY): void
-    {
-        $this->bY = $bY;
     }
 
     public function getElement(): ?Element
