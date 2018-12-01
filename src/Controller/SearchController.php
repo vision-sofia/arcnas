@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SearchController extends AbstractController
 {
     /**
-     * @Route("", name="app.search")
+     * @Route("/search", name="app.search")
      */
     public function index(): Response
     {
