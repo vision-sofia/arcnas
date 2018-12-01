@@ -1,38 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1 class="mt-4 mb-3">Вход</h1>
-
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            Начало
-        </li>
-    </ol>
-
-    <div class="row">
-        <div class="col-lg-5 offset-3">
-            <form action="{{ path('app.login.check') }}" method="post" class="g-py-15">
+    <div class="container">
+        <div class="section">
+            <form action="{{ path('app.login.check') }}" method="post" class="login-form" class="g-py-15">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-                <div class="form-group row">
-                    <label class="col-sm-5 col-form-label">Потребителско име</label>
-                    <div class="col-sm-7">
-                        <input name="_username" class="form-control" type="text" placeholder="Потребителско име">
-                    </div>
+                <div class="field">
+                    <p class="control has-icons-left has-icons-right">
+                        <input name="_username" class="input" type="text" placeholder="Име">
+                        <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
+                    </p>
                 </div>
-                <div class="form-group row">
-                    <label class="col-sm-5 col-form-label">Парола</label>
-                    <div class="col-sm-7">
-                        <input name="_password" class="form-control" type="password" placeholder="Парола">
-                    </div>
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input name="_password" class="input" type="password" placeholder="Парола">
+                        <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                    </p>
                 </div>
 
-                <div class="form-group row">
-                    <div class="col-sm-7 offset-5">
-                        <button type="submit" class="btn btn-primary">Вход</button>
-                    </div>
-                </div>
+                <a class="button is-warning mtb10"
+                   id="submit-button"
+                   onclick="loginCtrl.login()">Вход</a>
+                
             </form>
         </div>
     </div>
+
 {% endblock %}

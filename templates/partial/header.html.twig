@@ -1,6 +1,6 @@
 
 
-<nav class="navbar is-warning" role="navigation" aria-label="main navigation">
+<nav class="navbar is-info" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a href="{{ path('app.index') }}">ArcNas</a>
     </div>
@@ -9,21 +9,21 @@
         <div class="navbar-end">
             <div class="navbar-item">
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    <a class="button is-danger mlr10" href="{{ path('app.upload') }}">
+                    <a class="button is-warning mlr10" href="{{ path('app.upload') }}">
                         <span class="icon is-small">
                           <i class="fas fa-upload"></i>
                         </span>
                         <strong>Качи снимка</strong>
                     </a>
 
-                    <a class="button is-warning mlr10" href="{{ path('logout') }}">
+                    <a class="button is-info mlr10" href="{{ path('logout') }}">
                         <strong>Изход</strong>
                     </a>
                 {% else %}
-                    <a class="button is-warning mlr10" href="{{ path('app.sign-up') }}">
+                    <a class="button is-info mlr10" href="{{ path('app.sign-up') }}">
                         <strong>Регистрация</strong>
                     </a>
-                    <a class="button is-danger mlr10" href="{{ path('app.sign-in') }}">Вход</a>
+                    <a class="button is-warning mlr10" href="{{ path('app.sign-in') }}">Вход</a>
                 {% endif %}
             </div>
         </div>
