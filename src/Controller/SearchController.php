@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\ConfigurationList\Element;
 use App\Entity\Photo;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,6 +15,12 @@ class SearchController extends AbstractController
      */
     public function index(): Response
     {
+        $element = $this->getDoctrine()->getRepository(Element::class)->find(34);
+
+        $result= $this->getDoctrine()->getRepository(Photo::class)->findByCount($element);
+
+        dump($result);
+
         return $this->render('search/index.html.twig', [
 
         ]);
