@@ -1,4 +1,4 @@
-var photo = {
+var photoCtrl = {
   rect: {
     0: null,
     1: null
@@ -49,7 +49,7 @@ var photo = {
     let rectObj = $('.active-rect');
   
     let onStopDragResize = function(event, ui) {
-      rectCoordinates = {
+      activeRectCoordinates = {
         topLeft: {
           x: ui.position.left,
           y: ui.position.top
@@ -77,7 +77,7 @@ var photo = {
       stop: onStopDragResize
     });
   
-    rectCoordinates = {
+    activeRectCoordinates = {
       topLeft: {
         x: this.pxToInt(rectObj.css('left')),
         y: this.pxToInt(rectObj.css('top'))
@@ -105,12 +105,10 @@ var photo = {
     
     // workaround for last drag event zero coordinates
     let coordinates = this.getCoordinates(event);
-    if (coordinates.x <= 0 && coordinates.y <= 0 && !this.negativeCoordinates) {
+    if ((coordinates.x <= 0 || coordinates.y <= 0) && !this.negativeCoordinates) {
       this.negativeCoordinates = true;
       return;
     }
-    
-    
     
     let topLeft = {
       x: Math.max(Math.min(this.rect[0].x, this.rect[1].x), 0),
@@ -161,6 +159,16 @@ var photo = {
     // };
   },
   
+  
+  percentsToPx: function(percents, imgSize) {
+    return Math.round(imgSize * percents / 100);
+    
+    // return {
+    //   x: Math.round(event.offsetX / img.width * 10000) / 100,
+    //   y: Math.round(event.offsetY / img.height * 10000) / 100
+    // };
+  },
+  
   pxToInt: function (px) {
     return parseInt(px.slice(0, -2));
   },
@@ -186,21 +194,15 @@ var photo = {
     form.find('#submit-button').attr('disabled', 'disabled');
     
     // add to items list
-    let itemsList = $('.items');
-    itemsList.find('li#item-' + selectedItemType.val() + ' a').css({
-      visibility: 'visible'
-    });
-    let countOfItemsOfThisType = $('.passive-rect.rect-type-' + selectedItemType.val()).length;
-    itemsList.find('li#item-' + selectedItemType.val() + ' a').html(
-      selectedItemType.find('option:selected').text() + '  <span class="tag is-light">' + countOfItemsOfThisType + '</span>');
+    itemsList.addItem(selectedItemType.val());
   },
   
   getListOfCoordinates: function () {
     let img = $('img');
-    return this.getPercents(rectCoordinates.topLeft.x, img.width()) + ',' + this.getPercents(rectCoordinates.topLeft.y, img.height()) + ',' + // top left
-      this.getPercents(rectCoordinates.topLeft.x + rectCoordinates.width, img.width()) + ',' + this.getPercents(rectCoordinates.topLeft.y, img.height()) + ',' + // top right
-      this.getPercents(rectCoordinates.topLeft.x + rectCoordinates.width, img.width()) + ',' + this.getPercents(rectCoordinates.topLeft.y + rectCoordinates.height, img.height()) + ',' + // bottom right
-      this.getPercents(rectCoordinates.topLeft.x, img.width()) + ',' + this.getPercents(rectCoordinates.topLeft.y + rectCoordinates.height, img.height()); // bottom left
+    return this.getPercents(activeRectCoordinates.topLeft.x, img.width()) + ',' + this.getPercents(activeRectCoordinates.topLeft.y, img.height()) + ',' + // top left
+      this.getPercents(activeRectCoordinates.topLeft.x + activeRectCoordinates.width, img.width()) + ',' + this.getPercents(activeRectCoordinates.topLeft.y, img.height()) + ',' + // top right
+      this.getPercents(activeRectCoordinates.topLeft.x + activeRectCoordinates.width, img.width()) + ',' + this.getPercents(activeRectCoordinates.topLeft.y + activeRectCoordinates.height, img.height()) + ',' + // bottom right
+      this.getPercents(activeRectCoordinates.topLeft.x, img.width()) + ',' + this.getPercents(activeRectCoordinates.topLeft.y + activeRectCoordinates.height, img.height()); // bottom left
   },
   
   makePassive: function (selectedItemType) {

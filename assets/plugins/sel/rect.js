@@ -1,62 +1,37 @@
-var rect = {
-  lastCoordinates: null,
-  onMouseDown: function(event, img) {
-    this.lastCoordinates = this.getCoordinates(event);
-  },
-  onDrag: function(event, rect) {
-    // if (!this.lastCoordinates) {
-    //   this.lastCoordinates = this.getCoordinates(event);
-    //   return;
-    // }
-    
-    let currentCoordinates = this.getCoordinates(event);
-  
-  
-    let diffX = this.lastCoordinates.x - currentCoordinates.x;
-    let diffY = this.lastCoordinates.y - currentCoordinates.y;
-  
-    this.lastCoordinates = currentCoordinates;
-    
-    // this.rect[1] = this.getCoordinates(event);
-    if (!(diffX === 0 && diffY === 0)) {
-      this.drawRect(rect, diffX, diffY);
-    }
-  },
-  
-  drawRect: function(rect, diffX, diffY) {
-    let rectObj = $(rect);
-    //
-    // // workaround for last drag event zero coordinates
-    // let coordinates = this.getCoordinates(event);
-    // if (coordinates.x <= 0 && coordinates.y <= 0 && !this.negativeCoordinates) {
-    //   this.negativeCoordinates = true;
-    //   return;
-    // }
-    
-    console.log({
-      top: parseInt(rectObj.css('top').slice(0, -2)) + diffX,
-      left: parseInt(rectObj.css('left').slice(0, -2)) + diffY
+var rectCtrl = {
+  drawPassiveRects: function (passiveRects) {
+    let photoWrapper = $('.photo-wrapper');
+    let img = photoWrapper.find('img');
+    passiveRects.forEach(r => {
+      console.log(photoCtrl.getPercents(r.topLeft.y, img.height()));
+      photoWrapper.append('<div class="rect passive-rect rect-type-' + r.type + '" style="top: ' + photoCtrl.percentsToPx(r.topLeft.y, img.height()) + 'px; left: ' + photoCtrl.percentsToPx(r.topLeft.x, img.width()) + 'px; width: ' + photoCtrl.percentsToPx(r.width, img.width()) + 'px; height: ' + photoCtrl.percentsToPx(r.height, img.height()) + 'x;"></div>');
+      itemsList.addItem(r.type);
     });
-    
-    // rectObj.css({
-    //   top: parseInt(rectObj.css('top').slice(0, -2)) + diffX,
-    //   left: parseInt(rectObj.css('left').slice(0, -2)) + diffY
-    // });
   },
   
-  
-  getCoordinates: function(event) {
-    return {
-      x: event.offsetX,
-      y: event.offsetY
-    };
+  showPassiveRects: function(rectType) {
+    $('.passive-rect.rect-type-' + rectType).css({
+      display:'block',
+      opacity: 1
+    });
+  },
+  hidePassiveRects: function(rectType) {
+    $('.passive-rect.rect-type-' + rectType).css({
+      display: 'none',
+      // opacity: 0.5
+    });
   },
   
-  
-  getPercents: function(event, img) {
-    return {
-      x: Math.round(event.offsetX / img.width * 10000) / 100,
-      y: Math.round(event.offsetY / img.height * 10000) / 100
-    };
-  }
+  showAllPassiveRects: function() {
+    $('.passive-rect').css({
+      display:'block',
+      opacity: 1
+    });
+  },
+  hideAllPassiveRects: function() {
+    $('.passive-rect').css({
+      display: 'none',
+      // opacity: 0.5
+    });
+  },
 }
