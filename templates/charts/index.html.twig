@@ -23,121 +23,68 @@
 
 
         <script>
+            var chartData = {
+              chart: {
+                type: 'bar'
+              },
+              title: {
+                text: 'Срещания на елементи'
+              },
 
-            function openChart() {
-              $('.chart-tab').addClass('is-active');
-              $('.windows-pie-tab').removeClass('is-active');
-              $('.parter-pie-tab').removeClass('is-active');
-              $('.facade-pie-tab').removeClass('is-active');
-              $('#chart-container').show();
-              $('#windows-pie-container').hide();
-              $('#parter-pie-container').hide();
-              $('#facade1-pie-container').hide();
-              $('#facade2-pie-container').hide();
-            }
-
-            function openWindowsPie() {
-              $('.chart-tab').removeClass('is-active');
-              $('.windows-pie-tab').addClass('is-active');
-              $('.parter-pie-tab').removeClass('is-active');
-              $('.facade-pie-tab').removeClass('is-active');
-              $('#chart-container').hide();
-              $('#windows-pie-container').show();
-              $('#parter-pie-container').hide();
-              $('#facade1-pie-container').hide();
-              $('#facade2-pie-container').hide();
-            }
-
-            function openParterPie() {
-              $('.chart-tab').removeClass('is-active');
-              $('.windows-pie-tab').removeClass('is-active');
-              $('.parter-pie-tab').addClass('is-active');
-              $('.facade-pie-tab').removeClass('is-active');
-              $('#chart-container').hide();
-              $('#windows-pie-container').hide();
-              $('#parter-pie-container').show();
-              $('#facade1-pie-container').hide();
-              $('#facade2-pie-container').hide();
-            }
-
-            function openFacadePie() {
-              $('.chart-tab').removeClass('is-active');
-              $('.windows-pie-tab').removeClass('is-active');
-              $('.parter-pie-tab').removeClass('is-active');
-              $('.facade-pie-tab').addClass('is-active');
-              $('#chart-container').hide();
-              $('#windows-pie-container').hide();
-              $('#parter-pie-container').hide();
-              $('#facade1-pie-container').show();
-              $('#facade2-pie-container').show();
-            }
-
-
-            Highcharts.chart('chart-container', {
-                chart: {
-                    type: 'bar'
-                },
+              xAxis: {
+                categories: [
+                    {% for element in elements_stats %}
+                  '{{ element.name }}'{% if loop.last == false %},{% endif %}
+                    {% endfor %}
+                ],
                 title: {
-                    text: 'Срещания на елементи'
+                  text: null
+                }
+              },
+              yAxis: {
+                min: 0,
+                title: {
+                  text: 'Брой срещания',
+                  align: 'high'
                 },
+                labels: {
+                  overflow: 'justify'
+                }
+              },
+              tooltip: {
+                valueSuffix: ' millions'
+              },
+              plotOptions: {
+                bar: {
+                  dataLabels: {
+                    enabled: true
+                  }
+                }
+              },
+              legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 80,
+                floating: true,
+                borderWidth: 1,
+                backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
+                shadow: true
+              },
+              credits: {
+                enabled: false
+              },
+              series: [{
+                data: [
+                    {% for element in elements_stats %}
+                    {{ element.count }}{% if loop.last == false %},{% endif %}
+                    {% endfor %}
 
-                xAxis: {
-                    categories: [
-                        {% for element in elements_stats %}
-                        '{{ element.name }}'{% if loop.last == false %},{% endif %}
-                        {% endfor %}
-                    ],
-                    title: {
-                        text: null
-                    }
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Брой срещания',
-                        align: 'high'
-                    },
-                    labels: {
-                        overflow: 'justify'
-                    }
-                },
-                tooltip: {
-                    valueSuffix: ' millions'
-                },
-                plotOptions: {
-                    bar: {
-                        dataLabels: {
-                            enabled: true
-                        }
-                    }
-                },
-                legend: {
-                    layout: 'vertical',
-                    align: 'right',
-                    verticalAlign: 'top',
-                    x: -40,
-                    y: 80,
-                    floating: true,
-                    borderWidth: 1,
-                    backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-                    shadow: true
-                },
-                credits: {
-                    enabled: false
-                },
-                series: [{
-                    data: [
-                        {% for element in elements_stats %}
-                        {{ element.count }}{% if loop.last == false %},{% endif %}
-                        {% endfor %}
-
-                    ]
-                }]
-            });
-
-
-
-            Highcharts.chart('windows-pie-container', {
+                ]
+              }]
+            };
+            var windowData = {
               chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
@@ -179,9 +126,8 @@
                   y: 21
                 }]
               }]
-            });
-
-            Highcharts.chart('parter-pie-container', {
+            };
+            var parterData = {
               chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
@@ -220,9 +166,8 @@
                   y: 14
                 }]
               }]
-            });
-
-            Highcharts.chart('facade1-pie-container', {
+            }
+            var facade1Data = {
               chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
@@ -261,11 +206,8 @@
                   y: 95.1
                 }]
               }]
-            });
-
-
-
-            Highcharts.chart('facade2-pie-container', {
+            };
+            var facade2Data = {
               chart: {
                 plotBackgroundColor: null,
                 plotBorderWidth: null,
@@ -310,7 +252,68 @@
                   y: 23792
                 }]
               }]
-            });
+            };
+
+            Highcharts.chart('chart-container', chartData)
+
+            function openChart() {
+              $('.chart-tab').addClass('is-active');
+              $('.windows-pie-tab').removeClass('is-active');
+              $('.parter-pie-tab').removeClass('is-active');
+              $('.facade-pie-tab').removeClass('is-active');
+              $('#chart-container').show();
+              $('#windows-pie-container').hide();
+              $('#parter-pie-container').hide();
+              $('#facade1-pie-container').hide();
+              $('#facade2-pie-container').hide();
+              Highcharts.chart('chart-container', chartData)
+            }
+
+            function openWindowsPie() {
+              $('.chart-tab').removeClass('is-active');
+              $('.windows-pie-tab').addClass('is-active');
+              $('.parter-pie-tab').removeClass('is-active');
+              $('.facade-pie-tab').removeClass('is-active');
+              $('#chart-container').hide();
+              $('#windows-pie-container').show();
+              $('#parter-pie-container').hide();
+              $('#facade1-pie-container').hide();
+              $('#facade2-pie-container').hide();
+              Highcharts.chart('windows-pie-container', windowData);
+            }
+
+            function openParterPie() {
+              $('.chart-tab').removeClass('is-active');
+              $('.windows-pie-tab').removeClass('is-active');
+              $('.parter-pie-tab').addClass('is-active');
+              $('.facade-pie-tab').removeClass('is-active');
+              $('#chart-container').hide();
+              $('#windows-pie-container').hide();
+              $('#parter-pie-container').show();
+              $('#facade1-pie-container').hide();
+              $('#facade2-pie-container').hide();
+              Highcharts.chart('parter-pie-container', parterData)
+            }
+
+            function openFacadePie() {
+              $('.chart-tab').removeClass('is-active');
+              $('.windows-pie-tab').removeClass('is-active');
+              $('.parter-pie-tab').removeClass('is-active');
+              $('.facade-pie-tab').addClass('is-active');
+              $('#chart-container').hide();
+              $('#windows-pie-container').hide();
+              $('#parter-pie-container').hide();
+              $('#facade1-pie-container').show();
+              $('#facade2-pie-container').show();
+              Highcharts.chart('facade1-pie-container', facade1Data);
+              Highcharts.chart('facade2-pie-container', facade2Data);
+            }
+
+
+
+
+
+
 
         </script>
     </div>
