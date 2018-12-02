@@ -11,10 +11,10 @@
                     <div style="display: flex;">
                         <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}">
                             <img src="/media/{{ item.item.file }}" alt="" />
-                        </a>
-                        {% for mark in item.marks %}
+                            {% for mark in item.marks %}
                             <div class="rect passive-rect rect-type-{{ mark.element.id }}" style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
-                        {% endfor %}
+                            {% endfor %}
+                    </a>
                     </div>
                 </div>
             {% endfor %}
