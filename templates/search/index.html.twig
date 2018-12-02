@@ -1,9 +1,37 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1 class="mt-4 mb-3">Търси</h1>
+    <div class="container">
+        <h1 class="title">Търсене</h1>
+        <div style="width:50%;">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            <button type="submit">Търси</button>
+            {{ form_end(form) }}
 
 
+            <form action="{{ path('app.login.check') }}" method="post" class="login-form" novalidate="novalidate">
+                <div class="field">
+                    <p class="control has-icons-left has-icons-right">
+                        <input name="_username" class="input" type="text" placeholder="Име">
+                        <span class="icon is-small is-left"><i class="fas fa-search"></i></span>
+                        <button class="button is-warning mtb10">Влез</button>
+                    </p>
+                </div>
+            </form>
+        </div>
+        <div style="width:50%;">
+        </div>
+        <div style="width: 500px;">
+            {% for item in result %}
+                <div style="position:relative;">
+                    <img src="/media/{{ item.item.file }}" alt="" />
 
+                    {% for mark in item.marks %}
+                        <div class="rect passive-rect rect-type-{{ mark.element.id }}" style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
+                    {% endfor %}
+                </div>
 
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
