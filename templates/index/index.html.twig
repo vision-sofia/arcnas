@@ -1,7 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% for photo in photos %}
+    <div style="display: flex;">
+        <div style="width: 25%;">
+            {% for item in photos %}
+                <div style="position:relative;">
+                    <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}"><img src="/media/{{ item.item.file }}" alt="" /></a>
+                    {% for mark in item.marks %}
+                        <div class="rect passive-rect rect-type-{{ mark.element.id }}" style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {#{% for photo in photos %}
         <a href="{{ path('app.photo', {'uuid': photo.uuid}) }}">Image</a>
-    {% endfor %}
+    {% endfor %}#}
 {% endblock %}

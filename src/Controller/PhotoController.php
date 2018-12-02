@@ -8,32 +8,41 @@ use App\Entity\PhotoElement;
 use App\Event\Events;
 use App\Event\PhotoElementTouchEvent;
 use App\Form\PhotoElementType;
+use Doctrine\DBAL\Driver\Connection;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PhotoController extends AbstractController
 {
     protected $eventDispatcher;
+    protected $session;
 
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+
+    public function __construct(EventDispatcherInterface $eventDispatcher, SessionInterface $session)
     {
         $this->eventDispatcher = $eventDispatcher;
+        $this->session = $session;
     }
 
     /**
      * @Route("/photos/{uuid}", name="app.photo", requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"})
      * @ParamConverter("photo", class="App\Entity\Photo", options={"mapping": {"uuid": "uuid"}})
+     * @Method({"POST", "GET"})
      */
     public function index(Request $request, Photo $photo, \App\Services\Database\Photo $photoDatabaseService): Response
     {
         $photoElement = new PhotoElement();
         $photoElement->setPhoto($photo);
 
-        $form = $this->createForm(PhotoElementType::class, $photoElement);
+        $form = $this->createForm(PhotoElementType::class, $photoElement, [
+            'action' => $this->generateUrl('app.photo', ['uuid' => $photo->getUuid()]),
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -80,6 +89,7 @@ class PhotoController extends AbstractController
 
         $elements = $this->getDoctrine()->getRepository(Element::class)->findAll();
 
+
         $w = [];
 
         foreach ($elements as $element) {
@@ -93,13 +103,91 @@ class PhotoController extends AbstractController
 
         $marks = $this->transform($photo->getMetadata(), $w);
 
+        $elementsCount = [];
+
+        foreach ($marks as $mark) {
+            if (isset($elementsCount[$mark['element_id']])) {
+                ++$elementsCount[$mark['element_id']];
+            } else {
+                $elementsCount[$mark['element_id']] = 1;
+            }
+        }
+
+        /** @var Connection $conn */
+        $conn = $this->getDoctrine()->getConnection();
+
+        $stmt = $conn->prepare('
+            SELECT
+                sum(st_area(sector)) as area, 
+                element_id
+            FROM
+                arc_photo.element e
+                    INNER JOIN
+                arc_photo.photo p ON p.id = e.photo_id
+            WHERE
+                e.photo_id = :photo_id
+            GROUP BY e.element_id        
+        ');
+
+        $stmt->bindValue('photo_id', $photo->getId());
+        $stmt->execute();
+
+        $areas = [];
+
+        $referenceElementForCompare = $this->session->get('compare_area_by');
+
+        foreach ($stmt->fetchAll() as $item) {
+            $areas[$item['element_id']] = $item['area'];
+        }
+
+        $z = [];
+
+        if ($referenceElementForCompare && isset($areas[$referenceElementForCompare])) {
+            $ref = $areas[$referenceElementForCompare];
+
+            foreach ($areas as $key => $value) {
+                if ($ref > $value) {
+                    $z[$key] = round(($value / $ref) * 100, 1);
+                } else {
+                    $z[$key] = '';
+                }
+            }
+        }
+
+        $activeElements = [];
+
+        foreach ($elementsCount as $key => $value) {
+            $eid = $w[$key]['id'];
+            $activeElements[$eid] = $w[$key]['name'];
+        }
+
         return $this->render('photo/index.html.twig', [
-            'photo'    => $photo,
-            'form'     => $form->createView(),
-            'marks'   => $marks,
-            'elements' => $elements,
+            'photo'                      => $photo,
+            'form'                       => $form->createView(),
+            'marks'                      => $marks,
+            'elements'                   => $elements,
+            'elementsCount'              => $elementsCount,
+            'activeElements'             => $activeElements,
+            'areas'                      => $z,
+            'referenceElementForCompare' => $referenceElementForCompare,
             'markedElements' => $this->getMarkedElements($elements, $marks)
         ]);
+    }
+
+    /**
+     * @Route("/photows/{uuid}/change-ref", name="app.photo.ref", requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"})
+     * @ParamConverter("photo", class="App\Entity\Photo", options={"mapping": {"uuid": "uuid"}})
+     * @Method("POST")
+     */
+    public function changeRefArea(Request $request, Photo $photo): Response
+    {
+        if ($request->isMethod('POST') && $request->request->has('element')) {
+            $elementId = (int)$request->request->get('element');
+
+            $this->session->set('compare_area_by', $elementId);
+        }
+
+        return $this->redirectToRoute('app.photo', ['uuid' => $photo->getUuid()]);
     }
 
     public function transform(array $metadata, array $elements): array

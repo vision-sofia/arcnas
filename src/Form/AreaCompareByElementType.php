@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PhotoElementType extends AbstractType
+class AreaCompareByElementType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -26,14 +26,6 @@ class PhotoElementType extends AbstractType
                     return $er->createQueryBuilder('u')
                               ->orderBy('u.name', 'ASC');
                 },
-            ])
-            ->add('condition', EntityType::class, [
-                'class'        => Condition::class,
-                'choice_label' => 'name',
-                'placeholder'  => '',
-            ])
-            ->add('coordinates', TextType::class, [
-                'mapped' => false,
             ])
         ;
     }

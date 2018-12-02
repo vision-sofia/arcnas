@@ -1,5 +1,39 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div class="container">
+        <h1 class="title">Търсене</h1>
+        <div style="width:50%;">
 
+
+
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                <div class="field">
+                    <p class="control has-icons-left has-icons-right">
+
+                        {{ form_widget(form.element) }}
+                        {{ form_widget(form.condition) }}
+
+                        {{ form_widget(form.count, {'attr': {'class': 'input'}}) }}
+                        <span class="icon is-small is-left"><i class="fas fa-search"></i></span>
+                        <button class="button is-info mtb10">Търси</button>
+                    </p>
+                </div>
+            {{ form_end(form) }}
+        </div>
+        <div style="width:50%;">
+        </div>
+        <div style="width: 500px;">
+            {% for item in result %}
+                <div style="position:relative;">
+                    <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}"><img src="/media/{{ item.item.file }}" alt="" /></a>
+
+                    {% for mark in item.marks %}
+                        <div class="rect passive-rect rect-type-{{ mark.element.id }}" style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
+                    {% endfor %}
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}

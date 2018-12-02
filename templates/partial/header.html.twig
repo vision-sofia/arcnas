@@ -8,6 +8,13 @@
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-end">
             <div class="navbar-item">
+                <a class="button is-info mlr10" href="{{ path('app.search') }}">
+                      <span class="icon is-small">
+                          <i class="fas fa-search"></i>
+                        </span>
+                    <strong>Търси</strong>
+                </a>
+
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <a class="button is-warning mlr10" href="{{ path('app.upload') }}">
                         <span class="icon is-small">

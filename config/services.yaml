@@ -41,6 +41,8 @@ services:
         arguments:
             $targetDirectory: '%media_upload_dir%'
 
+    Doctrine\DBAL\Query\QueryBuilder:
+
 
 
 

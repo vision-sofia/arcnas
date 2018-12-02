@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\PhotoRepository")
  * @ORM\Table(name="photo", schema="arc_photo")
  */
 class Photo implements UuidInterface, TraceableInterface, UploadableFileInterface
