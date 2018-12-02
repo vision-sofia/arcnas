@@ -34,3 +34,11 @@ var searchCtrl = {
   }
   
 };
+
+var uploadCtrl = {
+  
+  upload: function () {
+    $('.upload-form').submit();
+  },
+  
+};

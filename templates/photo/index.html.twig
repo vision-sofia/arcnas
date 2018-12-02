@@ -32,20 +32,22 @@
                 <div class="column is-half">
                     <div class="itemType">
                         <label class="label">Тип на обекта</label>
-                        <div class="control">
+                        <div class="control has-icons-left">
                             <div class="select">
                                 {{ form_widget(form.element, {'attr': {'class': 'form-control'}}) }}
                             </div>
+                            <span class="icon is-small is-left"><i class="fas fa-building"></i></span>
                         </div>
                     </div>
                 </div>
                 <div class="column is-half">
                     <div class="itemCondition">
                         <label class="label">Състояние</label>
-                        <div class="control">
+                        <div class="control has-icons-left">
                             <div class="select">
                                 {{ form_widget(form.condition, {'attr': {'class': 'form-control'}}) }}
                             </div>
+                            <span class="icon is-small is-left"><i class="fas fa-highlighter"></i></span>
                         </div>
                     </div>
                 </div>
