@@ -72,9 +72,7 @@ class SearchController extends AbstractController
                 ];
             }
         }
-
-        dump($element);
-
+        
         return $this->render('search/index.html.twig', [
             'form'   => $form->createView(),
             'result' => $finalResult,
