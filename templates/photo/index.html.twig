@@ -28,23 +28,29 @@
 
             {{ form_widget(form.coordinates, {'id': 'coordinates', 'attr': { 'hidden': 'hidden'}}) }}
 
-            <div class="itemType">
-                <label class="label">Тип на обекта</label>
-                <div class="control">
-                    <div class="select">
-                        {{ form_widget(form.element, {'attr': {'class': 'form-control'}}) }}
+            <div class="columns">
+                <div class="column is-half">
+                    <div class="itemType">
+                        <label class="label">Тип на обекта</label>
+                        <div class="control">
+                            <div class="select">
+                                {{ form_widget(form.element, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <div class="itemCondition">
+                        <label class="label">Състояние</label>
+                        <div class="control">
+                            <div class="select">
+                                {{ form_widget(form.condition, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="itemCondition">
-                <label class="label">Състояние</label>
-                <div class="control">
-                    <div class="select">
-                        {{ form_widget(form.condition, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                </div>
-            </div>
             {#<button type="submit">test</button>#}
             <a class="button is-warning mtb10"
                id="submit-button"

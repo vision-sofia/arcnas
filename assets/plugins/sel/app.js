@@ -14,4 +14,23 @@ var userCtrl = {
   signUp: function () {
     $('.register-form').submit();
   }
+  
+};
+
+var searchCtrl = {
+  
+  search: function () {
+    let valid = true;
+    let elementVal = $('.search-form .itemType select').val();
+    if (!elementVal) {
+      $('.search-form .itemType .select').addClass('is-danger');
+      valid = false;
+    }
+  
+    if (valid) {
+      $('.search-form').submit();
+    }
+    return;
+  }
+  
 };
