@@ -39,7 +39,13 @@
     box-shadow: 0 0 5px rgba(0,0,0, 0.5);
 }
 
-.thumb a {
+.thumb-map {
+    position:relative;
+    margin: 20px;
+    box-shadow: 0 0 5px rgba(0,0,0, 0.5);
+}
+
+.thumb a, .thumb-map a {
     line-height: .8em;
 }
 
@@ -106,6 +112,10 @@
 }
 
 
+
+.map-photo {
+    box-shadow: 0 0 5px rgba(0,0,0, 0.5);
+}
 
 .rect {
     position: absolute;

@@ -15,6 +15,13 @@
                     <strong>Търси</strong>
                 </a>
 
+                <a class="button is-info mlr10" href="{{ path('app.map') }}">
+                      <span class="icon is-small">
+                          <i class="fas fa-map-marked-alt"></i>
+                        </span>
+                    <strong>Карта</strong>
+                </a>
+
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <a class="button is-warning mlr10" href="{{ path('app.upload') }}">
                         <span class="icon is-small">
