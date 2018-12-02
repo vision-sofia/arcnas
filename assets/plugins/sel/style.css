@@ -30,6 +30,25 @@
 
 
 
+
+.thumb {
+    position:relative;
+    float: left;
+    width: calc(25% - 25px);
+    margin: 25px 25px 0 0;
+    box-shadow: 0 0 5px rgba(0,0,0, 0.5);
+}
+
+.thumb a {
+    line-height: .8em;
+}
+
+.thumb:hover {
+    transition: all 180ms ease-in;
+    transform: scale(1.05); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+
 .body-wrapper {
     position: absolute;
     width: 100%;
