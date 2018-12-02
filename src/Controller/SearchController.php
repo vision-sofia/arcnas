@@ -50,7 +50,6 @@ class SearchController extends AbstractController
 
         $finalResult = [];
 
-
         if ($result) {
 
             $elements = $this->getDoctrine()->getRepository(Element::class)->findAll();
@@ -72,9 +71,6 @@ class SearchController extends AbstractController
                     'marks' => $this->utils->transform($item->getMetadata(), $w),
                 ];
             }
-
-            dump($finalResult);
-
         }
 
         return $this->render('search/index.html.twig', [
