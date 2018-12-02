@@ -8,6 +8,7 @@
                 <li class="chart-tab is-active"><a onclick="openChart()">Срещания на елементи</a></li>
                 <li class="windows-pie-tab"><a onclick="openWindowsPie()">Прозорци</a></li>
                 <li class="parter-pie-tab"><a onclick="openParterPie()">Партерен етаж</a></li>
+                <li class="facade-pie-tab"><a onclick="openFacadePie()">Фасади и саниране</a></li>
             </ul>
         </div>
 
@@ -17,6 +18,9 @@
         <div id="windows-pie-container" style="display: none;min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
         <div id="parter-pie-container" style="display: none;min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
 
+        <div id="facade1-pie-container" style="display: none;min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+        <div id="facade2-pie-container" style="display: none;min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
 
         <script>
 
@@ -24,27 +28,48 @@
               $('.chart-tab').addClass('is-active');
               $('.windows-pie-tab').removeClass('is-active');
               $('.parter-pie-tab').removeClass('is-active');
+              $('.facade-pie-tab').removeClass('is-active');
               $('#chart-container').show();
               $('#windows-pie-container').hide();
               $('#parter-pie-container').hide();
+              $('#facade1-pie-container').hide();
+              $('#facade2-pie-container').hide();
             }
 
             function openWindowsPie() {
               $('.chart-tab').removeClass('is-active');
               $('.windows-pie-tab').addClass('is-active');
               $('.parter-pie-tab').removeClass('is-active');
+              $('.facade-pie-tab').removeClass('is-active');
               $('#chart-container').hide();
               $('#windows-pie-container').show();
               $('#parter-pie-container').hide();
+              $('#facade1-pie-container').hide();
+              $('#facade2-pie-container').hide();
             }
 
             function openParterPie() {
               $('.chart-tab').removeClass('is-active');
               $('.windows-pie-tab').removeClass('is-active');
               $('.parter-pie-tab').addClass('is-active');
+              $('.facade-pie-tab').removeClass('is-active');
               $('#chart-container').hide();
               $('#windows-pie-container').hide();
               $('#parter-pie-container').show();
+              $('#facade1-pie-container').hide();
+              $('#facade2-pie-container').hide();
+            }
+
+            function openFacadePie() {
+              $('.chart-tab').removeClass('is-active');
+              $('.windows-pie-tab').removeClass('is-active');
+              $('.parter-pie-tab').removeClass('is-active');
+              $('.facade-pie-tab').addClass('is-active');
+              $('#chart-container').hide();
+              $('#windows-pie-container').hide();
+              $('#parter-pie-container').hide();
+              $('#facade1-pie-container').show();
+              $('#facade2-pie-container').show();
             }
 
 
@@ -183,19 +208,106 @@
                 }
               },
               series: [{
-                name: 'Прозорци',
+                name: 'Партерен етаж',
                 colorByPoint: true,
                 data: [{
-                  name: 'Прозорец',
-                  y: 100,
+                  name: 'Партерен етаж',
+                  y: 34,
                   sliced: true,
                   selected: true
                 }, {
-                  name: 'Прозорец с щора',
-                  y: 22
+                  name: 'Бизнес',
+                  y: 14
+                }]
+              }]
+            });
+
+            Highcharts.chart('facade1-pie-container', {
+              chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+              },
+              title: {
+                text: 'Фасади и саниране'
+              },
+              tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+              },
+              plotOptions: {
+                pie: {
+                  allowPointSelect: true,
+                  cursor: 'pointer',
+                  dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                      color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                  }
+                }
+              },
+              series: [{
+                name: 'Фасади и саниране',
+                colorByPoint: true,
+                data: [ {
+                  name: 'Санирани',
+                  y: 4.9,
+                  sliced: true,
+                  selected: true
                 }, {
-                  name: 'Прозорец с решетка',
-                  y: 21
+                  name: 'Несанирани',
+                  y: 95.1
+                }]
+              }]
+            });
+
+
+
+            Highcharts.chart('facade2-pie-container', {
+              chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+              },
+              title: {
+                text: 'Фасади (състояние)'
+              },
+              tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+              },
+              plotOptions: {
+                pie: {
+                  allowPointSelect: true,
+                  cursor: 'pointer',
+                  dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                      color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                  }
+                }
+              },
+              series: [{
+                name: 'Фасади (състояние)',
+                colorByPoint: true,
+                data: [ {
+                  name: 'Отлично',
+                  y: 61670,
+                  sliced: true,
+                  selected: true
+                }, {
+                  name: 'Задоволително',
+                  y: 52613
+                }, {
+                  name: 'Добро',
+                  y: 8977
+                }, {
+                  name: 'Лошо',
+                  y: 23792
                 }]
               }]
             });
