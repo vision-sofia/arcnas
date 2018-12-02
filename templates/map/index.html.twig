@@ -1,0 +1,163 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div id='map'></div>
+    <div id="features" style="display: none;margin-top: 53px">
+      <div class="thumb-map">
+        <div style="display: flex;">
+          <a href="photos/4b881a30-c7dd-4c6e-afbf-4334b0fcd398">
+            <img src="/media/42aa233e95cfe3b60262ab40603dad62.jpeg"  style="width: 260px;" classs="map-photo" alt="" />
+
+            <div class="rect passive-rect rect-type-13" style="top: 21.3801%; left: 53.0115%; width: 23.7112%; height: 9.9547%; opacity: 0.75;"></div>
+            <div class="rect passive-rect rect-type-18" style="top: 34.3891%; left: 20.6626%; width: 22.5257%; height: 8.258%; border-color: rgb(0, 255, 0); opacity: 0.75;"></div>
+            <div class="rect passive-rect rect-type-8" style="top: 1.5837%; left: 75.1984%; width: 3.0486%; height: 8.8235%; border-color: rgb(255, 255, 0); opacity: 0.75;"></div>
+            <div class="rect passive-rect rect-type-10" style="top: 3.8462%; left: 0%; width: 79.0938%; height: 7.3529%; border-color: rgb(255, 255, 0); opacity: 0.75;"></div>
+            <div class="rect passive-rect rect-type-12" style="top: 9.7285%; left: 50.471%; width: 24.3887%; height: 9.0498%; border-color: rgb(0, 0, 255); opacity: 0.75;"></div>
+            <div class="rect passive-rect rect-type-17" style="top: 72.9638%; left: 12.8718%; width: 28.2841%; height: 26.5837%; border-color: rgb(0, 255, 0); opacity: 0.75;"></div>
+            <div class="rect passive-rect rect-type-18" style="top: 51.1312%; left: 15.2429%; width: 27.0985%; height: 11.7647%; border-color: rgb(0, 255, 0); opacity: 0.75;"></div>
+            <div class="rect passive-rect rect-type-18" style="top: 0%; left: 0%; width: 18.2915%; height: 11.8778%; border-color: rgb(0, 255, 0); opacity: 0.75;"></div>
+            <div class="rect passive-rect rect-type-17" style="width: 0%; height: 0%; border-color: rgb(0, 255, 0); opacity: 0.75;"></div>
+            <div class="rect passive-rect rect-type-16" style="width: 0%; height: 0%; border-color: rgb(0, 255, 0); opacity: 0.75;"></div>
+
+          </a>
+        </div>
+      </div>
+
+      <aside class="menu items" style="margin: 20px;">
+        <p class="menu-label">Отбелязани обекти</p>
+        <ul class="menu-list">
+          <li id="item-33" onmouseover="rectCtrl.showPassiveRects(33)" onmouseleave="rectCtrl.hidePassiveRects(33)">
+            <a>
+              <span class="tag item-color-mark" style="color: #00FF00;">•</span>
+              Колона
+              <span class="tag is-light"> 9 </span>
+            </a>
+          </li>
+          <li id="item-49" onmouseover="rectCtrl.showPassiveRects(49)" onmouseleave="rectCtrl.hidePassiveRects(49)">
+            <a>
+              <span class="tag item-color-mark" style="color: #00FF00;">•</span>
+              Прозорец с решетка
+              <span class="tag is-light"> 3 </span>
+            </a>
+          </li>
+          <li id="item-27" onmouseover="rectCtrl.showPassiveRects(27)" onmouseleave="rectCtrl.hidePassiveRects(27)">
+            <a>
+              <span class="tag item-color-mark" style="color: #FFFF00;">•</span>
+              Надстройка
+              <span class="tag is-light"> 1 </span>
+            </a>
+          </li>
+          <li id="item-30" onmouseover="rectCtrl.showPassiveRects(30)" onmouseleave="rectCtrl.hidePassiveRects(30)">
+            <a>
+              <span class="tag item-color-mark" style="color: #FF0000;">•</span>
+              Фасада
+              <span class="tag is-light"> 1 </span>
+            </a>
+          </li>
+        </ul>
+        <a class="button is-text" onmouseover="rectCtrl.showAllPassiveRects()" onmouseleave="rectCtrl.hideAllPassiveRects()">Покажи всички</a>
+
+      </aside>
+      <a class="button is-warning mtb10"
+         id="submit-button"
+         style="margin: 0 20px 20px 20px;"
+         href="photos/4b881a30-c7dd-4c6e-afbf-4334b0fcd398">
+        <span class="icon is-small">
+                          <i class="fas fa-plus"></i>
+        </span><strong>Добави още обекти</strong></a>
+
+    </div>
+
+    <script>
+      mapboxgl.accessToken = 'pk.eyJ1IjoicGhyZWVkb20iLCJhIjoiZ1p2dnNKVSJ9.NVLf3ZM0BDIiAYbYdXrMbQ';
+      var map = new mapboxgl.Map({
+        style: 'mapbox://styles/mapbox/light-v9',
+        center: [23.326,42.703],
+        zoom: 17.47,
+        pitch: 45,
+        bearing: -17.6,
+        container: 'map'
+      });
+
+      // The 'building' layer in the mapbox-streets vector source contains building-height
+      // data from OpenStreetMap.
+      map.on('load', function() {
+        // Insert the layer beneath any symbol layer.
+        var layers = map.getStyle().layers;
+
+        var labelLayerId;
+        for (var i = 0; i < layers.length; i++) {
+          if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+            labelLayerId = layers[i].id;
+            break;
+          }
+        }
+
+        map.addLayer({
+          'id': '3d-buildings',
+          'source': 'composite',
+          'source-layer': 'building',
+          'filter': ['==', 'extrude', 'true'],
+          'type': 'fill-extrusion',
+          'minzoom': 15,
+          'paint': {
+            'fill-extrusion-color': '#aaa',
+
+            // use an 'interpolate' expression to add a smooth transition effect to the
+            // buildings as the user zooms in
+            'fill-extrusion-height': [
+              "interpolate", ["linear"], ["zoom"],
+              15, 0,
+              15.05, ["get", "height"]
+            ],
+            'fill-extrusion-base': [
+              "interpolate", ["linear"], ["zoom"],
+              15, 0,
+              15.05, ["get", "min_height"]
+            ],
+            'fill-extrusion-opacity': .6
+          }
+        }, labelLayerId);
+        map.addSource('currentBuildings', {
+          type: 'geojson',
+          data: {
+            "type": "FeatureCollection",
+            "features": []
+          }
+        });
+        map.addLayer({
+          "id": "highlight",
+          "source": "currentBuildings",
+          'type': 'line',
+          'minzoom': 15,
+          'paint': {
+            'line-color': '#f00',
+            'line-width': 3
+          }
+        }, labelLayerId);
+        map.on('click', '3d-buildings', function(e) {
+          map.getSource('currentBuildings').setData({
+            "type": "FeatureCollection",
+            "features": e.features
+          });
+          map.on('click', '3d-buildings', function(e){
+            var features = map.queryRenderedFeatures(e.point);
+
+            $('#features').css({
+              display: 'block'
+            });
+//            $('#features').append('' +
+//              '                        <a href="photos/1feec702-4bf5-4530-b765-daf4397297b0">\n' +
+//            '                            <img src="/media/250cab33711021c4060c9fd38df693c4.jpeg"  style="width: 260px; margin: 20px" classs="map-photo" alt="" />\n' +
+//            '                        </a>\n' +
+//            '                   ');
+
+            //JSON.stringify(features, null, 2);
+          });
+        });
+      });
+
+
+    </script>
+{% endblock %}
