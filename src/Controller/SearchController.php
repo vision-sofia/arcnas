@@ -56,12 +56,12 @@ class SearchController extends AbstractController
 
             $w = [];
 
-            foreach ($elements as $element) {
-                $id = $element->getId();
+            foreach ($elements as $elementObj) {
+                $id = $elementObj->getId();
                 $w[$id] = [
-                    'id'    => $element->getId(),
-                    'color' => $element->getPrimaryColor(),
-                    'name'  => $element->getName(),
+                    'id'    => $elementObj->getId(),
+                    'color' => $elementObj->getPrimaryColor(),
+                    'name'  => $elementObj->getName(),
                 ];
             }
 
@@ -73,10 +73,13 @@ class SearchController extends AbstractController
             }
         }
 
+        dump($element);
+
         return $this->render('search/index.html.twig', [
             'form'   => $form->createView(),
             'result' => $finalResult,
-            'submitted' => $form->isSubmitted() && $form->isValid()
+            'submitted' => $form->isSubmitted() && $form->isValid(),
+            'searchedElement' => $form->isSubmitted() && $form->isValid() ? $element : null
         ]);
     }
 }

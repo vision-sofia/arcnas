@@ -51,25 +51,32 @@
 
 
 
+
+
     <div class="container">
 
-        <div style="width: 500px;">
+        <div class="section" style="padding-top: 0 !important; padding-bottom: 0 !important;">
             {% if submitted and result is empty %}
-                <div class="notification mlr20">
+                <div class="notification">
                     Няма намерени резултати
                 </div>
             {% endif %}
 
             {% for item in result %}
-                <div style="position:relative;">
-                    <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}"><img src="/media/{{ item.item.file }}" alt="" /></a>
-
-                    {% for mark in item.marks %}
-                        <div class="rect passive-rect rect-type-{{ mark.element.id }}" style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
-                    {% endfor %}
+                <div class="thumb">
+                    <div style="display: flex;">
+                        <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}">
+                            <img src="/media/{{ item.item.file }}" alt="" />
+                        </a>
+                        {% for mark in item.marks %}
+                            {% if mark.element.id == searchedElement.id %}
+                            <div class="rect passive-rect rect-type-{{ mark.element.id }}" style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
-
             {% endfor %}
         </div>
+
     </div>
 {% endblock %}
