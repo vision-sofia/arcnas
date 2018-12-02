@@ -1,24 +1,37 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
     <div class="container">
         <div class="section">
             <h1 class="title">Снимки</h1>
             {% for item in photos %}
-            <div class="thumb">
-                <div style="display: flex;">
-                <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}">
-                    <img src="/media/{{ item.item.file }}" alt="" />
-                </a>
-                {% for mark in item.marks %}
-                    <div class="rect passive-rect rect-type-{{ mark.element.id }}" style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
-                {% endfor %}
+                <div class="thumb">
+                    <div style="display: flex;">
+                        <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}">
+                            <img src="/media/{{ item.item.file }}" alt="" />
+                        </a>
+                        {% for mark in item.marks %}
+                            <div class="rect passive-rect rect-type-{{ mark.element.id }}" style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
             {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="container">
+        <div class="section">
+            <h1 class="title">Снимки</h1>
+            <div class="notification">
+                Влезте в профила си, за да видите снимките си.
             </div>
         </div>
     </div>
+    {% endif %}
+
+
 
     {#{% for photo in photos %}
         <a href="{{ path('app.photo', {'uuid': photo.uuid}) }}">Image</a>
