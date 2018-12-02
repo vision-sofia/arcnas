@@ -2,28 +2,64 @@
 
 {% block body %}
     <div class="container">
-        <h1 class="title">Търсене</h1>
-        <div style="width:50%;">
+        <div class="section">
+            <h1 class="title">Търсене</h1>
 
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'search-form'}}) }}
 
-
-            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                <div class="field">
-                    <p class="control has-icons-left has-icons-right">
-
-                        {{ form_widget(form.element) }}
-                        {{ form_widget(form.condition) }}
-
-                        {{ form_widget(form.count, {'attr': {'class': 'input'}}) }}
-                        <span class="icon is-small is-left"><i class="fas fa-search"></i></span>
-                        <button class="button is-info mtb10">Търси</button>
-                    </p>
+                <div class="columns">
+                    <div class="column is-one-quarter">
+                        <div class="itemType">
+                            <label class="label">Тип на обекта</label>
+                            <div class="control has-icons-left">
+                                <div class="select">
+                                    {{ form_widget(form.element) }}
+                                </div>
+                                <span class="icon is-small is-left"><i class="fas fa-building"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-one-quarter">
+                        <div class="itemCondition">
+                            <label class="label">Състояние</label>
+                            <div class="control has-icons-left">
+                                <div class="select">
+                                    {{ form_widget(form.condition) }}
+                                </div>
+                                <span class="icon is-small is-left"><i class="fas fa-building"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-one-quarter">
+                        <div class="field">
+                            <label class="label">Минимален брой елементи</label>
+                            <p class="control has-icons-left has-icons-right">
+                                {{ form_widget(form.count, {'attr': {'placeholder': 'Минимален брой', 'class': 'input', 'type': 'nnumber'}}) }}
+                                <span class="icon is-small is-left"><i class="fas fa-sort-numeric-up"></i></span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
+
+                <a class="button is-warning mtb10"
+                   id="submit-button"
+                   onclick="searchCtrl.search()">Търси</a>
+
             {{ form_end(form) }}
         </div>
-        <div style="width:50%;">
-        </div>
+    </div>
+
+
+
+    <div class="container">
+
         <div style="width: 500px;">
+            {% if submitted and result is empty %}
+                <div class="notification mlr20">
+                    Няма намерени резултати
+                </div>
+            {% endif %}
+
             {% for item in result %}
                 <div style="position:relative;">
                     <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}"><img src="/media/{{ item.item.file }}" alt="" /></a>

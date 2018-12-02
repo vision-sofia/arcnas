@@ -170,6 +170,7 @@ class PhotoController extends AbstractController
             'activeElements'             => $activeElements,
             'areas'                      => $z,
             'referenceElementForCompare' => $referenceElementForCompare,
+            'markedElements' => $this->getMarkedElements($elements, $marks)
         ]);
     }
 
@@ -210,5 +211,36 @@ class PhotoController extends AbstractController
         }
 
         return $result;
+    }
+
+    private function getMarkedElements(array $elements, array $marks) : array
+    {
+        $elementsCount = [];
+        foreach ($marks as $mark) {
+            if (isset($elementsCount[$mark['element_id']])) {
+                $elementsCount[$mark['element_id']] += 1;
+            } else {
+                $elementsCount[$mark['element_id']] = 1;
+            }
+        }
+
+        arsort($elementsCount);
+
+        $markedElements = [];
+        foreach ($elementsCount as $elementId => $count) {
+            foreach ($elements as $element) {
+                if ($element->getId() === $elementId) {
+                    $markedElements[] = [
+                        'id' => $element->getId(),
+                        'name' => $element->getName(),
+                        'color' => $element->getPrimaryColor(),
+                        'count' => $count
+                    ];
+                    break;
+                }
+            }
+        }
+
+        return $markedElements;
     }
 }

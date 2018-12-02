@@ -28,23 +28,29 @@
 
             {{ form_widget(form.coordinates, {'id': 'coordinates', 'attr': { 'hidden': 'hidden'}}) }}
 
-            <div class="itemType">
-                <label class="label">Тип на обекта</label>
-                <div class="control">
-                    <div class="select">
-                        {{ form_widget(form.element, {'attr': {'class': 'form-control'}}) }}
+            <div class="columns">
+                <div class="column is-half">
+                    <div class="itemType">
+                        <label class="label">Тип на обекта</label>
+                        <div class="control">
+                            <div class="select">
+                                {{ form_widget(form.element, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <div class="itemCondition">
+                        <label class="label">Състояние</label>
+                        <div class="control">
+                            <div class="select">
+                                {{ form_widget(form.condition, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="itemCondition">
-                <label class="label">Състояние</label>
-                <div class="control">
-                    <div class="select">
-                        {{ form_widget(form.condition, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                </div>
-            </div>
             {#<button type="submit">test</button>#}
             <a class="button is-warning mtb10"
                id="submit-button"
@@ -81,15 +87,15 @@
             <aside class="menu items" style="margin-top: 24px;">
                 <p class="menu-label">Отбелязани обекти</p>
                 <ul class="menu-list">
-                    {% for element in elements %}
+                    {% for element in markedElements %}
                         {% if elementsCount[element.id] is defined %}
                             <li id="item-{{ element.id }}"
                                 onmouseover="rectCtrl.showPassiveRects({{ element.id }})"
                                 onmouseleave="rectCtrl.hidePassiveRects({{ element.id }})">
                                 <a>
-                                    <span class="tag item-color-mark" style="color: {{ element.primaryColor }};">&bull;</span>
+                                    <span class="tag item-color-mark" style="color: {{ element.color }};">&bull;</span>
                                     {{ element.name }}
-                                    <span class="tag is-light"> {{ elementsCount[element.id] }} </span>
+                                    <span class="tag is-light"> {{ element.count }} </span>
                                     {% if areas[element.id] is defined and areas[element.id] is not empty %}
                                         <span class="is-light">(площ {{ areas[element.id] }}%)</span>
                                     {% endif %}
