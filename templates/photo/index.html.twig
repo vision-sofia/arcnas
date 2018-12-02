@@ -68,7 +68,7 @@
             <hr />
 
             <div class=" mtb10">
-                {#<form action="{{ path('app.photo.ref', {'uuid': photo.uuid}) }}" method="post" class="g-py-15 add-item-form">
+               <form action="{{ path('app.photo.ref', {'uuid': photo.uuid}) }}" method="post" class="g-py-15 compare-form">
                     <div class="itemType">
                         <label class="label">Сравни площ спрямо</label>
                         <div class="control">
@@ -83,7 +83,7 @@
                             <button type="submit" class="button">Сравни</button>
                         </div>
                     </div>
-                </form>#}
+                </form>
             </div>
 
             <aside class="menu items" style="margin-top: 24px;">
