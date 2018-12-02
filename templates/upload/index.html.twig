@@ -1,7 +1,36 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ form_start(form) }}
-        <button type="submit">Добави</button>
-    {{ form_end(form) }}
+    <div class="container">
+        <div class="section">
+            <h1 class="title">Добавяне на снимка</h1>
+            {{ form_start(form, {'attr': {'class': 'upload-form'}}) }}
+
+            {#<div class="file is-boxed">
+                <label class="file-label">
+                    <input class="file-input" type="file" name="resume">
+                    <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-upload"></i>
+              </span>
+              <span class="file-label">
+                Избери снимка…
+              </span>
+            </span>
+                </label>
+            </div>#}
+
+
+            {#<button type="submit">Добави</button>#}
+
+
+            {{ form_end(form) }}
+
+
+            <a class="button is-warning mtb10"
+               id="submit-button"
+               onclick="uploadCtrl.upload()">Качи</a>
+        </div>
+    </div>
+
 {% endblock %}
