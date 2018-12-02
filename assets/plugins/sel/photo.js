@@ -5,6 +5,7 @@ var photoCtrl = {
   },
   negativeCoordinates: false,
   drawable: true,
+  isFormActive: false,
   
   onLoad: function () {
     // center image
@@ -102,6 +103,7 @@ var photoCtrl = {
     let form = $('.add-item-form');
     form.find('input#coordinates').val(this.getListOfCoordinates());
     form.find('#submit-button').removeAttr('disabled');
+    this.isFormActive = true;
   },
   
   
@@ -184,7 +186,7 @@ var photoCtrl = {
   
   
   addItem: function () {
-    let valid = true;
+    let valid = this.isFormActive;
     let elementVal = $('.add-item-form .itemType select').val();
     if (!elementVal) {
       $('.add-item-form .itemType .select').addClass('is-danger');
@@ -245,6 +247,7 @@ var photoCtrl = {
     let form = $('.add-item-form');
     form.find('input#coordinates').val('');
     form.find('#submit-button').attr('disabled', 'disabled');
+    this.isFormActive = false;
   },
   
   clearSelection: function () {
