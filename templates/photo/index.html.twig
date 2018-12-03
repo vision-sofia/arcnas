@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
     <div class="body-wrapper">
         <div class="photo-panel">
             <div class="photo-panel-position-wrapper">
@@ -20,55 +19,54 @@
                     <div class="rect active-rect"></div>
                 </div>
             </div>
-
         </div>
         <div class="action-panel">
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                {{ form_start(form, {'attr': {'class': 'g-py-15 add-item-form', 'novalidate': 'novalidate'}}) }}
 
-            {{ form_start(form, {'attr': {'class': 'g-py-15 add-item-form', 'novalidate': 'novalidate'}}) }}
+                {{ form_widget(form.coordinates, {'id': 'coordinates', 'attr': { 'hidden': 'hidden'}}) }}
 
-            {{ form_widget(form.coordinates, {'id': 'coordinates', 'attr': { 'hidden': 'hidden'}}) }}
-
-            <div class="columns">
-                <div class="column is-half">
-                    <div class="itemType">
-                        <label class="label">Тип на обекта</label>
-                        <div class="control has-icons-left">
-                            <div class="select">
-                                {{ form_widget(form.element, {'attr': {'class': 'form-control'}}) }}
+                <div class="columns">
+                    <div class="column is-half">
+                        <div class="itemType">
+                            <label class="label">Тип на обекта</label>
+                            <div class="control has-icons-left">
+                                <div class="select">
+                                    {{ form_widget(form.element, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                                <span class="icon is-small is-left"><i class="fas fa-building"></i></span>
                             </div>
-                            <span class="icon is-small is-left"><i class="fas fa-building"></i></span>
+                        </div>
+                    </div>
+                    <div class="column is-half">
+                        <div class="itemCondition">
+                            <label class="label">Състояние</label>
+                            <div class="control has-icons-left">
+                                <div class="select">
+                                    {{ form_widget(form.condition, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                                <span class="icon is-small is-left"><i class="fas fa-highlighter"></i></span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="column is-half">
-                    <div class="itemCondition">
-                        <label class="label">Състояние</label>
-                        <div class="control has-icons-left">
-                            <div class="select">
-                                {{ form_widget(form.condition, {'attr': {'class': 'form-control'}}) }}
-                            </div>
-                            <span class="icon is-small is-left"><i class="fas fa-highlighter"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            {#<button type="submit">test</button>#}
-            <a class="button is-warning mtb10"
-               id="submit-button"
-               onclick="photoCtrl.addItem()"
-               disabled>Добави</a>
-            <a class="button is-light mtb10"
-               id="clear-button"
-               style="display: none"
-               onclick="photoCtrl.clearSelection()">Изчисти</a>
+                {#<button type="submit">test</button>#}
+                <a class="button is-warning mtb10"
+                   id="submit-button"
+                   onclick="photoCtrl.addItem()"
+                   disabled>Добави</a>
+                <a class="button is-light mtb10"
+                   id="clear-button"
+                   style="display: none"
+                   onclick="photoCtrl.clearSelection()">Изчисти</a>
 
-            {{ form_end(form) }}
+                {{ form_end(form) }}
 
-            <hr />
-
+                <hr />
+            {% endif %}
             <div class=" mtb10">
-               <form action="{{ path('app.photo.ref', {'uuid': photo.uuid}) }}" method="post" class="g-py-15 compare-form">
+                <form action="{{ path('app.photo.ref', {'uuid': photo.uuid}) }}" method="post" class="g-py-15 compare-form">
                     <div class="itemType">
                         <label class="label">Сравни площ спрямо</label>
                         <div class="control">
@@ -113,8 +111,6 @@
             </aside>
 
 
-
         </div>
     </div>
-
 {% endblock %}
