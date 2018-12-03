@@ -17,3 +17,4 @@
 
 .idea
 .env
+.php_cs.cache
