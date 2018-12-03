@@ -21,23 +21,14 @@ class SignInController extends AbstractController
      */
     public function index(): Response
     {
-#        $error = $this->authUtils->getLastAuthenticationError();
+        $error = $this->authUtils->getLastAuthenticationError();
 
-#        $lastUsername = $this->authUtils->getLastUsername();
+        $lastUsername = $this->authUtils->getLastUsername();
 
         return $this->render('sign-in/index.html.twig', [
-           # 'last_username' => $lastUsername,
-          #  'error'         => $error,
-            'destination'   => $this->generateUrl('app.sign-in'),
+            'last_username' => $lastUsername,
+            'error'         => $error,
         ]);
     }
 
-
-    /**
-     * @Route("/sign-in/check", name="app.login.check")
-     */
-    public function check()
-    {
-        return $this->redirectToRoute('app.sign-up');
-    }
 }
