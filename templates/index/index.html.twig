@@ -25,8 +25,21 @@
         <div class="section">
             <h1 class="title">Снимки</h1>
             <div class="notification">
-                Влезте в профила си, за да видите снимките си.
+                Влезте в профила си, за да добавяте или индексирате снимки.
             </div>
+
+            {% for item in photos %}
+                <div class="thumb">
+                    <div style="display: flex;">
+                        <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}">
+                            <img src="/media/{{ item.item.file }}" alt="" />
+                            {% for mark in item.marks %}
+                                <div class="rect passive-rect rect-type-{{ mark.element.id }}" style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
+                            {% endfor %}
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
     {% endif %}
