@@ -1,6 +1,6 @@
 ## ArcNas
 
-[Хакатон за София](https://www.facebook.com/events/216115065983486/)
+[Хакатон за София](https://vizia.sofia.bg/hackathon/#1543407757561-498b7b03-9c91)
 
 
 ## Демо
