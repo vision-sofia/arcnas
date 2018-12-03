@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="condition", schema="configuration_list")
+ * @ORM\Table(name="condition", schema="arc_configuration_list")
  */
 class Condition implements UuidInterface
 {

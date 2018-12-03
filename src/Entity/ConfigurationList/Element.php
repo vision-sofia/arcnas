@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="element", schema="configuration_list")
+ * @ORM\Table(name="element", schema="arc_configuration_list")
  */
 class Element implements UuidInterface
 {
