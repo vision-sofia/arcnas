@@ -28,7 +28,7 @@ class ChartController extends AbstractController
             FROM
                 arc_photo.element pe
                     INNER JOIN
-                configuration_list.element e ON pe.element_id = e.id
+                arc_configuration_list.element e ON pe.element_id = e.id
             GROUP BY
                 e.name
             ORDER BY count(*) DESC        
