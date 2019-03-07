@@ -2,8 +2,6 @@ framework:
     secret: '%env(APP_SECRET)%'
 
     session:
-        handler_id: App\Session\Storage\Handler\NativeRedisSessionHandler
-        save_path: '%env(SESSION_SAVE_PATH)%'
         gc_maxlifetime: 3600
         cookie_httponly: true
 
