@@ -1,10 +1,10 @@
 ## ArcNas
 
-[Хакатон за София](https://www.facebook.com/events/216115065983486/)
+[Хакатон за София](https://vizia.sofia.bg/hackathon)
 
 
 ## Демо
-demo: https://arcnas.dreamradio.org  
+url: https://arcnas.dreamradio.org  
 user: arc  
 pass: nas 
 
