@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+       {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+       <button type="submit">Запази</button>
+       {{ form_end(form) }}
+
+       {% for worldObject in worldObjects %}
+              <a href="">{{ worldObject.id }}</a>
+       {% endfor %}
+{% endblock %}

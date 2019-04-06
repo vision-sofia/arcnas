@@ -33,7 +33,7 @@ class UploadController extends AbstractController
             $em->persist($photo);
             $em->flush();
 
-            return $this->redirectToRoute('app.index');
+         #   return $this->redirectToRoute('app.index');
         }
 
         return $this->render('upload/index.html.twig', [

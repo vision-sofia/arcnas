@@ -5,10 +5,6 @@ framework:
         gc_maxlifetime: 3600
         cookie_httponly: true
 
-    assets:
-        base_urls:
-            - '%env(ASSETS_MAIN_URL)%'
-
     #esi: true
     #fragments: true
     php_errors:

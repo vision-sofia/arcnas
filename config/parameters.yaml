@@ -1,4 +1,3 @@
 parameters:
     locale: 'bg'
-    session_save_path: '%env(SESSION_SAVE_PATH)%'
-    media_upload_dir: '%env(MEDIA_UPLOAD_DIR)%'
+    media_upload_dir: '%kernel.project_dir%/public/media'
