@@ -27,6 +27,11 @@ class Element implements UuidInterface
     private $name;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
+     */
+    private $attributeName;
+
+    /**
      * @ORM\Column(type="string", length=7, nullable=true)
      */
     private $primaryColor;

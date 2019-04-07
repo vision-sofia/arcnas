@@ -6,6 +6,7 @@ use App\Services\Utils;
 use Doctrine\DBAL\Driver\Connection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -24,22 +25,45 @@ class MapController extends AbstractController
     /**
      * @Route("", name="index")
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $elementId = $request->query->get('element');
+
         /** @var Connection $conn */
         $conn = $this->getDoctrine()->getConnection();
 
-        $stmt = $conn->prepare('
-            SELECT 
-                uuid,
-                name, 
-                attributes, 
-                ST_AsGeoJSON(coordinates) as coordinates
-            FROM 
-                arc_world_object.world_object        
-        ');
+        if($elementId) {
+            $stmt = $conn->prepare('
+                SELECT 
+                    w.uuid,
+                    w.name, 
+                    w.attributes, 
+                    ST_AsGeoJSON(w.coordinates) as coordinates
+                FROM 
+                    arc_world_object.world_object w
+                        INNER JOIN
+                    arc_photo.element e ON w.id = e.world_object_id
+                WHERE
+                    e.id = :element_id
+                
+            ');
 
-        $stmt->execute();
+            $stmt->bindValue('element_id', $elementId);
+            $stmt->execute();
+
+        } else {
+            $stmt = $conn->prepare('
+                SELECT 
+                    w.uuid,
+                    w.name, 
+                    w.attributes, 
+                    ST_AsGeoJSON(w.coordinates) as coordinates
+                FROM 
+                    arc_world_object.world_object w
+            ');
+
+            $stmt->execute();
+        }
 
         $result = [];
 
