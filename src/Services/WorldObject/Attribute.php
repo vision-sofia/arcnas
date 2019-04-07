@@ -21,6 +21,19 @@ class Attribute
 
         $stmt = $conn->prepare('
             UPDATE
+                arc_world_object.world_object
+            SET
+                attributes = \'{}\'
+            WHERE
+                id = :id 
+                AND attributes IS NULL
+        ');
+
+        $stmt->bindValue('id', $worldObjectId);
+        $stmt->execute();
+
+        $stmt = $conn->prepare('
+            UPDATE
                 arc_world_object.world_object w
             SET
                 attributes = attributes || (
