@@ -60,4 +60,14 @@ class Element implements UuidInterface
     {
         $this->primaryColor = $primaryColor;
     }
+
+    public function getAttributeName(): ?string
+    {
+        return $this->attributeName;
+    }
+
+    public function setAttributeName(string $attributeName): void
+    {
+        $this->attributeName = $attributeName;
+    }
 }
