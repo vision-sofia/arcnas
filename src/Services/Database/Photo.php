@@ -45,6 +45,7 @@ class Photo
                                 (SELECT
                                     condition_id,
                                     element_id,
+                                    world_object_id,
                                     ST_AsGeoJSON(sector) as geo
                                 FROM
                                     arc_photo.element a

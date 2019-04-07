@@ -22,8 +22,21 @@
         </div>
         <div class="action-panel">
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                {{ form_start(form, {'attr': {'class': 'g-py-15 add-item-form', 'novalidate': 'novalidate'}}) }}
+                <div style="margin-top: 60px;margin-bottom: 30px;">
 
+                    {% for worldObject in worldObjects %}
+                        <a href="{{ path('app.photo', {'uuid': photo.uuid, 'wo': worldObject.id}) }}">{{ worldObject.id }}</a>
+                    {% endfor %}
+
+                    {{ form_start(worldObjectForm, {'attr': {'novalidate': 'novalidate'}}) }}
+                    {{ form_widget(worldObjectForm.coordinates, {'attr': {'class': 'form-control'}}) }}
+                    <button type="submit">Запази</button>
+                    {{ form_end(worldObjectForm) }}
+                </div>
+
+                {{ form_start(form, {'action': '', 'attr': {'class': 'g-py-15 add-item-form', 'novalidate': 'novalidate'}}) }}
+
+                {% if worldObject.id is defined %}
                 {{ form_widget(form.coordinates, {'id': 'coordinates', 'attr': { 'hidden': 'hidden'}}) }}
 
                 <div class="columns">
@@ -65,24 +78,6 @@
 
                 <hr />
             {% endif %}
-            <div class=" mtb10">
-                <form action="{{ path('app.photo.ref', {'uuid': photo.uuid}) }}" method="post" class="g-py-15 compare-form">
-                    <div class="itemType">
-                        <label class="label">Сравни площ спрямо</label>
-                        <div class="control">
-                            <div class="select">
-                                <select name="element" class="form-control">
-                                    <option></option>
-                                    {% for key, value in activeElements %}
-                                        <option value="{{ key }}" {{ referenceElementForCompare == key ? 'selected="selected"' : '' }}>{{ value }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <button type="submit" class="button">Сравни</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
 
             <aside class="menu items" style="margin-top: 24px;">
                 <p class="menu-label">Отбелязани обекти</p>
@@ -109,7 +104,7 @@
                    onmouseleave="rectCtrl.hideAllPassiveRects()">Покажи всички</a>
 
             </aside>
-
+            {% endif %}
 
         </div>
     </div>

@@ -5,9 +5,12 @@ namespace App\Controller;
 use App\Entity\ConfigurationList\Element;
 use App\Entity\Photo;
 use App\Entity\PhotoElement;
+use App\Entity\WorldObject\WorldObject;
 use App\Event\Events;
 use App\Event\PhotoElementTouchEvent;
 use App\Form\PhotoElementType;
+use App\Form\Type\WorldObjectType;
+use CrEOF\Spatial\PHP\Types\Geography\Point;
 use Doctrine\DBAL\Driver\Connection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -40,12 +43,22 @@ class PhotoController extends AbstractController
         $photoElement = new PhotoElement();
         $photoElement->setPhoto($photo);
 
+        $worldObjectId = $request->query->get('wo');
+
+        $worldObject = $this->getDoctrine()
+                            ->getRepository(WorldObject::class)
+                            ->findOneBy(['id' => $worldObjectId]);
+
+
+
         $form = $this->createForm(PhotoElementType::class, $photoElement, [
             'action' => $this->generateUrl('app.photo', ['uuid' => $photo->getUuid()]),
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $photoElement->setWorldObject($worldObject);
+
             $em = $this->getDoctrine()->getManager();
             //   $em->detach($photo);
 
@@ -85,6 +98,7 @@ class PhotoController extends AbstractController
             return $this->redirectToRoute('app.photo', [
                 'uuid' => $photo->getUuid(),
             ]);
+
         }
 
         $elements = $this->getDoctrine()->getRepository(Element::class)->findAll();
@@ -101,7 +115,9 @@ class PhotoController extends AbstractController
             ];
         }
 
-        $marks = $this->transform($photo->getMetadata(), $w);
+        $filterWorldObject = $worldObject ? $worldObject->getId() : null;
+
+        $marks = $this->transform($photo->getMetadata(), $w, $filterWorldObject);
 
         $elementsCount = [];
 
@@ -161,6 +177,26 @@ class PhotoController extends AbstractController
             $activeElements[$eid] = $w[$key]['name'];
         }
 
+
+        $worldObjectForm = $this->createForm(WorldObjectType::class);
+        $worldObjectForm->handleRequest($request);
+
+        if($worldObjectForm->isSubmitted() && $worldObjectForm->isValid()) {
+            /** @var WorldObject $worldObject */
+            $worldObject = $worldObjectForm->getData();
+
+            $point = new Point(1, 1);
+            $worldObject->setCoordinates($point);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($worldObject);
+            $em->flush();
+        }
+
+        $worldObjects = $this->getDoctrine()
+                             ->getRepository(WorldObject::class)
+                             ->findAll();
+
         return $this->render('photo/index.html.twig', [
             'photo'                      => $photo,
             'form'                       => $form->createView(),
@@ -170,7 +206,10 @@ class PhotoController extends AbstractController
             'activeElements'             => $activeElements,
             'areas'                      => $z,
             'referenceElementForCompare' => $referenceElementForCompare,
-            'markedElements' => $this->getMarkedElements($elements, $marks)
+            'markedElements' => $this->getMarkedElements($elements, $marks),
+            'worldObjectForm' => $worldObjectForm->createView(),
+            'worldObjects' => $worldObjects,
+            'worldObject' => $worldObject
         ]);
     }
 
@@ -190,7 +229,7 @@ class PhotoController extends AbstractController
         return $this->redirectToRoute('app.photo', ['uuid' => $photo->getUuid()]);
     }
 
-    public function transform(array $metadata, array $elements): array
+    public function transform(array $metadata, array $elements, int $filterByWorldObjectId = null): array
     {
         $result = [];
 
@@ -206,7 +245,12 @@ class PhotoController extends AbstractController
                     'height' => $v['geo']['coordinates'][0][2][1] - $v['geo']['coordinates'][0][0][1],
                 ];
 
+                if(isset($v['world_object_id']) && $filterByWorldObjectId !== null && $filterByWorldObjectId !== $v['world_object_id']) {
+                    continue;
+                }
+
                 $result[] = $v;
+
             }
         }
 
@@ -218,7 +262,7 @@ class PhotoController extends AbstractController
         $elementsCount = [];
         foreach ($marks as $mark) {
             if (isset($elementsCount[$mark['element_id']])) {
-                $elementsCount[$mark['element_id']] += 1;
+                ++$elementsCount[$mark['element_id']];
             } else {
                 $elementsCount[$mark['element_id']] = 1;
             }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "369bc6362e4bbe02a9fcc6d8019ac3af",
+    "content-hash": "a586acffacb1ca1b0fb5dbc8cfd0dc3e",
     "packages": [
         {
             "name": "creof/doctrine2-spatial",
@@ -6756,7 +6756,8 @@
         "php": "^7.2.12",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-pdo": "*"
     },
     "platform-dev": []
 }

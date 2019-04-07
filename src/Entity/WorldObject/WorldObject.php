@@ -4,6 +4,7 @@ namespace App\Entity\WorldObject;
 
 use App\Entity\Traits\UUIDableTrait;
 use App\Entity\UuidInterface;
+use CrEOF\Spatial\PHP\Types\Geography\Point;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -79,14 +80,12 @@ class WorldObject implements UuidInterface
         $this->attributes = $attributes;
     }
 
-
-    public function getCoordinates()
+    public function getCoordinates():?Point
     {
         return $this->coordinates;
     }
 
-
-    public function setCoordinates($coordinates): void
+    public function setCoordinates(Point $coordinates): void
     {
         $this->coordinates = $coordinates;
     }

@@ -29,11 +29,6 @@ class Photo implements UuidInterface, TraceableInterface, UploadableFileInterfac
     private $file;
 
     /**
-     * @ORM\Column(name="coordinates", type="point_geog", nullable=true)
-     */
-    private $coordinates;
-
-    /**
      * @ORM\Column(type="json_array", options={"jsonb": true}, nullable=true)
      */
     private $metadata;
@@ -59,21 +54,8 @@ class Photo implements UuidInterface, TraceableInterface, UploadableFileInterfac
         return $this->file;
     }
 
-    /**
-     * @return mixed
-     */
     public function getMetadata()
     {
         return $this->metadata;
     }
-
-    /**
-     * @param mixed $metadata
-     */
-    public function setMetadata($metadata): void
-    {
-        $this->metadata = $metadata;
-    }
-
-
 }

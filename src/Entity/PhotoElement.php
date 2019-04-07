@@ -6,6 +6,7 @@ use App\Entity\ConfigurationList\Condition;
 use App\Entity\ConfigurationList\Element;
 use App\Entity\Traits\TraceTrait;
 use App\Entity\Traits\UUIDableTrait;
+use App\Entity\WorldObject\WorldObject;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,6 +46,11 @@ class PhotoElement implements UuidInterface, TraceableInterface
      */
     private $photo;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\WorldObject\WorldObject")
+     * @ORM\JoinColumn(name="world_object_id", referencedColumnName="id", nullable=true)
+     */
+    private $worldObject;
 
 
     public function getId(): ?int
@@ -71,40 +77,38 @@ class PhotoElement implements UuidInterface, TraceableInterface
     {
         $this->condition = $condition;
     }
-
-    /**
-     * @return mixed
-     */
+    
     public function getSector()
     {
         return $this->sector;
     }
 
-    /**
-     * @param mixed $sector
-     */
     public function setSector($sector): void
     {
         $this->sector = $sector;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getPhoto()
     {
         return $this->photo;
     }
 
-    /**
-     * @param mixed $photo
-     */
+
     public function setPhoto($photo): void
     {
         $this->photo = $photo;
     }
 
 
+    public function getWorldObject(): ?WorldObject
+    {
+        return $this->worldObject;
+    }
 
 
+    public function setWorldObject(?WorldObject $worldObject): void
+    {
+        $this->worldObject = $worldObject;
+    }
 }
