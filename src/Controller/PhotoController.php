@@ -141,6 +141,8 @@ class PhotoController extends AbstractController
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($worldObject);
                 $em->flush();
+
+                return $this->redirectToRoute('app.photo.wo', ['uuid' => $photo->getUuid(), 'wo' => $worldObject->getUuid()]);
             }
         }
 
@@ -215,9 +217,7 @@ class PhotoController extends AbstractController
 
             $this->photoDatabaseService->updateMetadata($photo->getId());
 
-            return $this->redirectToRoute('app.photo', [
-                'uuid' => $photo->getUuid(),
-            ]);
+            return $this->redirectToRoute('app.photo.wo', ['uuid' => $photo->getUuid(), 'wo' => $worldObject->getUuid()]);
 
         }
 
