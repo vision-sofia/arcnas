@@ -18,7 +18,7 @@ var userCtrl = {
 };
 
 var searchCtrl = {
-  
+
   search: function () {
     let valid = true;
     let elementVal = $('.search-form .itemType select').val();
@@ -28,7 +28,8 @@ var searchCtrl = {
     }
   
     if (valid) {
-      $('.search-form').submit();
+      console.log(elementVal);
+      // $('.search-form').submit();
     }
     return;
   }

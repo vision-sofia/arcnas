@@ -231,8 +231,6 @@
 
             }
 
-            map.addLayer(marker);
-
             return marker;
         }
 
@@ -263,8 +261,18 @@
             type: 'GET',
             success: geojsonFeatures => {
                 geoJSON = geojsonFeatures;
-                map = mapInit(geojsonFeatures[0].geometry.coordinates.reverse());
                 createMarkersFromGeoJSON();
+                {%  if worldObject.uuid is defined %}
+                var initCoordinates = markers['{{ worldObject.uuid }}'].getLatLng();
+                var mapCenter = initCoordinates;
+                {%  else %}
+                var mapCenter = geojsonFeatures[0].geometry.coordinates.reverse();
+                {%  endif %}
+                map = mapInit(mapCenter);
+
+                Object.keys(markers).forEach(i => {
+                    map.addLayer(markers[i]);
+                });
                 deactivateAllMarkers();
 
                 {% if worldObject.uuid is defined %}
@@ -287,6 +295,7 @@
 
             var mapCenter = map.getCenter();
             markers['new'] = createMarker(mapCenter);
+            map.addLayer(markers['new']);
 
             attachCoordinatesToMarkerForm(mapCenter);
             showNewMarkerAddButton();
