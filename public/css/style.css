@@ -31,3 +31,10 @@ body {
 .mt-20 {
   margin-top: 20px;
 }
+
+footer {
+  position: fixed;
+  padding: 15px ;
+  bottom: 0;
+  width: 100%;
+}
