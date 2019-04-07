@@ -12,7 +12,6 @@ use App\Form\PhotoElementType;
 use App\Form\Type\WorldObjectType;
 use CrEOF\Spatial\PHP\Types\Geography\Point;
 use Doctrine\DBAL\Driver\Connection;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -25,84 +24,30 @@ class PhotoController extends AbstractController
 {
     protected $eventDispatcher;
     protected $session;
+    protected $photoDatabaseService;
 
 
-    public function __construct(EventDispatcherInterface $eventDispatcher, SessionInterface $session)
+    public function __construct(
+        EventDispatcherInterface $eventDispatcher,
+        SessionInterface $session,
+        \App\Services\Database\Photo $photoDatabaseService
+    )
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->session = $session;
+        $this->photoDatabaseService = $photoDatabaseService;
     }
 
     /**
-     * @Route("/photos/{uuid}", name="app.photo", requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"})
+     * @Route("/photos/{uuid}", name="app.photo", requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"}, methods={"GET", "POST"})
      * @ParamConverter("photo", class="App\Entity\Photo", options={"mapping": {"uuid": "uuid"}})
-     * @Method({"POST", "GET"})
      */
     public function index(Request $request, Photo $photo, \App\Services\Database\Photo $photoDatabaseService): Response
     {
         $photoElement = new PhotoElement();
         $photoElement->setPhoto($photo);
 
-        $worldObjectId = $request->query->get('wo');
-
-        $worldObject = $this->getDoctrine()
-                            ->getRepository(WorldObject::class)
-                            ->findOneBy(['id' => $worldObjectId]);
-
-
-
-        $form = $this->createForm(PhotoElementType::class, $photoElement, [
-            'action' => $this->generateUrl('app.photo', ['uuid' => $photo->getUuid()]),
-        ]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $photoElement->setWorldObject($worldObject);
-
-            $em = $this->getDoctrine()->getManager();
-            //   $em->detach($photo);
-
-            $em->persist($photoElement);
-            $em->flush();
-
-            $coordinates = $form->get('coordinates')->getData();
-
-            $ex = explode(',', $coordinates);
-
-            $z = [];
-            $i = 0;
-
-            foreach ($ex as $coord) {
-                ++$i;
-
-                if (0 === $i % 2) {
-                    $coord .= ',';
-                }
-
-                $z[] = $coord;
-            }
-
-            $z[] = $z[0];
-            $z[] = $z[1];
-
-            $w = implode(' ', $z);
-            $w = rtrim($w, ',');
-
-            if ($coordinates) {
-                $event = new PhotoElementTouchEvent($photoElement, $w);
-                $this->eventDispatcher->dispatch(Events::PHOTO_ELEMENT_INSERT, $event);
-            }
-
-            $photoDatabaseService->updateMetadata($photo->getId());
-
-            return $this->redirectToRoute('app.photo', [
-                'uuid' => $photo->getUuid(),
-            ]);
-
-        }
-
         $elements = $this->getDoctrine()->getRepository(Element::class)->findAll();
-
 
         $w = [];
 
@@ -115,9 +60,7 @@ class PhotoController extends AbstractController
             ];
         }
 
-        $filterWorldObject = $worldObject ? $worldObject->getId() : null;
-
-        $marks = $this->transform($photo->getMetadata(), $w, $filterWorldObject);
+        $marks = $this->transform($photo->getMetadata(), $w);
 
         $elementsCount = [];
 
@@ -184,13 +127,196 @@ class PhotoController extends AbstractController
         if($worldObjectForm->isSubmitted() && $worldObjectForm->isValid()) {
             /** @var WorldObject $worldObject */
             $worldObject = $worldObjectForm->getData();
+            $coordinates = $worldObjectForm->get('coordinates')->getData();
 
-            $point = new Point(1, 1);
-            $worldObject->setCoordinates($point);
+            $coordinates = explode(',', $coordinates);
+
+            if(isset($coordinates[0], $coordinates[1])) {
+                $lat = (float)$coordinates[0];
+                $lng = (float)$coordinates[1];
+
+                $point = new Point($lat, $lng);
+                $worldObject->setCoordinates($point);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($worldObject);
+                $em->flush();
+            }
+        }
+
+        $worldObjects = $this->getDoctrine()
+                             ->getRepository(WorldObject::class)
+                             ->findAll();
+
+        return $this->render('photo/index.html.twig', [
+            'photo'                      => $photo,
+            'marks'                      => $marks,
+            'elements'                   => $elements,
+            'elementsCount'              => $elementsCount,
+            'activeElements'             => $activeElements,
+            'areas'                      => $z,
+            'referenceElementForCompare' => $referenceElementForCompare,
+            'markedElements' => $this->getMarkedElements($elements, $marks),
+            'worldObjectForm' => $worldObjectForm->createView(),
+            'worldObjects' => $worldObjects,
+        ]);
+    }
+
+    /**
+     * @Route("/photos/{uuid}/{wo}", name="app.photo.wo", requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"}, methods={"POST", "GET"})
+     * @ParamConverter("photo", class="App\Entity\Photo", options={"mapping": {"uuid": "uuid"}})
+     * @ParamConverter("worldObject", class="App\Entity\WorldObject\WorldObject", options={"mapping": {"wo": "uuid"}})
+     */
+    public function wo(Request $request, Photo $photo, WorldObject $worldObject): Response
+    {
+        $photoElement = new PhotoElement();
+        $photoElement->setPhoto($photo);
+        $photoElement->setWorldObject($worldObject);
+
+        $form = $this->createForm(PhotoElementType::class, $photoElement);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $photoElement->setWorldObject($worldObject);
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($worldObject);
+            //   $em->detach($photo);
+
+            $em->persist($photoElement);
             $em->flush();
+
+            $coordinates = $form->get('coordinates')->getData();
+
+            $ex = explode(',', $coordinates);
+
+            $z = [];
+            $i = 0;
+
+            foreach ($ex as $coord) {
+                ++$i;
+
+                if (0 === $i % 2) {
+                    $coord .= ',';
+                }
+
+                $z[] = $coord;
+            }
+
+            $z[] = $z[0];
+            $z[] = $z[1];
+
+            $w = implode(' ', $z);
+            $w = rtrim($w, ',');
+
+            if ($coordinates) {
+                $event = new PhotoElementTouchEvent($photoElement, $w);
+                $this->eventDispatcher->dispatch(Events::PHOTO_ELEMENT_INSERT, $event);
+            }
+
+            $this->photoDatabaseService->updateMetadata($photo->getId());
+
+            return $this->redirectToRoute('app.photo', [
+                'uuid' => $photo->getUuid(),
+            ]);
+
+        }
+
+        $elements = $this->getDoctrine()->getRepository(Element::class)->findAll();
+
+
+        $w = [];
+
+        foreach ($elements as $element) {
+            $id = $element->getId();
+            $w[$id] = [
+                'id'    => $element->getId(),
+                'color' => $element->getPrimaryColor(),
+                'name'  => $element->getName(),
+            ];
+        }
+
+        $marks = $this->transform($photo->getMetadata(), $w, $worldObject->getId());
+
+        $elementsCount = [];
+
+        foreach ($marks as $mark) {
+            if (isset($elementsCount[$mark['element_id']])) {
+                ++$elementsCount[$mark['element_id']];
+            } else {
+                $elementsCount[$mark['element_id']] = 1;
+            }
+        }
+
+        /** @var Connection $conn */
+        $conn = $this->getDoctrine()->getConnection();
+
+        $stmt = $conn->prepare('
+            SELECT
+                sum(st_area(sector)) as area, 
+                element_id
+            FROM
+                arc_photo.element e
+                    INNER JOIN
+                arc_photo.photo p ON p.id = e.photo_id
+            WHERE
+                e.photo_id = :photo_id
+            GROUP BY e.element_id        
+        ');
+
+        $stmt->bindValue('photo_id', $photo->getId());
+        $stmt->execute();
+
+        $areas = [];
+
+        $referenceElementForCompare = $this->session->get('compare_area_by');
+
+        foreach ($stmt->fetchAll() as $item) {
+            $areas[$item['element_id']] = $item['area'];
+        }
+
+        $z = [];
+
+        if ($referenceElementForCompare && isset($areas[$referenceElementForCompare])) {
+            $ref = $areas[$referenceElementForCompare];
+
+            foreach ($areas as $key => $value) {
+                if ($ref > $value) {
+                    $z[$key] = round(($value / $ref) * 100, 1);
+                } else {
+                    $z[$key] = '';
+                }
+            }
+        }
+
+        $activeElements = [];
+
+        foreach ($elementsCount as $key => $value) {
+            $eid = $w[$key]['id'];
+            $activeElements[$eid] = $w[$key]['name'];
+        }
+
+
+        $worldObjectForm = $this->createForm(WorldObjectType::class);
+        $worldObjectForm->handleRequest($request);
+
+        if($worldObjectForm->isSubmitted() && $worldObjectForm->isValid()) {
+            /** @var WorldObject $worldObject */
+            $worldObject = $worldObjectForm->getData();
+            $coordinates = $worldObjectForm->get('coordinates')->getData();
+
+            $coordinates = explode(',', $coordinates);
+
+            if(isset($coordinates[0], $coordinates[1])) {
+                $lat = (float)$coordinates[0];
+                $lng = (float)$coordinates[1];
+
+                $point = new Point($lat, $lng);
+                $worldObject->setCoordinates($point);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($worldObject);
+                $em->flush();
+            }
         }
 
         $worldObjects = $this->getDoctrine()
@@ -213,10 +339,14 @@ class PhotoController extends AbstractController
         ]);
     }
 
+
     /**
-     * @Route("/photows/{uuid}/change-ref", name="app.photo.ref", requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"})
+     * @Route("/photows/{uuid}/change-ref",
+     *     name="app.photo.ref",
+     *     requirements={"uuid": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"},
+     *     methods={"POST"}
+     * )
      * @ParamConverter("photo", class="App\Entity\Photo", options={"mapping": {"uuid": "uuid"}})
-     * @Method("POST")
      */
     public function changeRefArea(Request $request, Photo $photo): Response
     {

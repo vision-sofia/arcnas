@@ -48,7 +48,7 @@ class PhotoElement implements UuidInterface, TraceableInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\WorldObject\WorldObject")
-     * @ORM\JoinColumn(name="world_object_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="world_object_id", referencedColumnName="id", nullable=false)
      */
     private $worldObject;
 
@@ -77,7 +77,7 @@ class PhotoElement implements UuidInterface, TraceableInterface
     {
         $this->condition = $condition;
     }
-    
+
     public function getSector()
     {
         return $this->sector;

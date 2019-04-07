@@ -31,9 +31,10 @@ class MapController extends AbstractController
 
         $stmt = $conn->prepare('
             SELECT 
+                uuid,
                 name, 
                 attributes, 
-                ST_AsGeoJSON(coordinates)  as coordinates
+                ST_AsGeoJSON(coordinates) as coordinates
             FROM 
                 arc_world_object.world_object        
         ');
@@ -43,21 +44,21 @@ class MapController extends AbstractController
         $result = [];
 
         while ($row = $stmt->fetch()) {
-            # $result['name'] = $row['name'];
-            # $result['attributes'] = json_decode($row['attributes']);
+            $attributes = json_decode($row['attributes'], true);
 
-            $attr = json_decode($row['attributes'], true);
+            if(empty($attributes)) {
+                $attributes = [];
+            }
 
-            $z = json_decode($row['coordinates']);
-            $z->properties = $attr + ['name' => $row['name']];
-
+            $properties = [
+                'id' => $row['uuid'],
+                'name' => $row['name'],
+            ] + $attributes;
 
             $result[] = [
                 'type'       => 'Feature',
+                'properties' => $properties,
                 'geometry'   => json_decode($row['coordinates']),
-                'properties' => [
-                    'name' => $row['name'],
-                ]
             ];
         }
 

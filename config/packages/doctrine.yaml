@@ -7,10 +7,10 @@ doctrine:
         charset: utf8
         url: '%env(resolve:DATABASE_URL)%'
         types:
-            geometry:   CrEOF\Spatial\DBAL\Types\GeometryType
-            geography:  CrEOF\Spatial\DBAL\Types\GeographyType
-            point_geog:      CrEOF\Spatial\DBAL\Types\Geography\PointType
-            polygon_geom:    CrEOF\Spatial\DBAL\Types\Geometry\PolygonType
+            geometry: CrEOF\Spatial\DBAL\Types\GeometryType
+            geography: CrEOF\Spatial\DBAL\Types\GeographyType
+            point_geog: CrEOF\Spatial\DBAL\Types\Geography\PointType
+            polygon_geom: CrEOF\Spatial\DBAL\Types\Geometry\PolygonType
 
         #mapping_types:
         #    point_geog: point_geog

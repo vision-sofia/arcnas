@@ -23,22 +23,10 @@ class SearchType extends AbstractType
                 'class'        => Element::class,
                 'choice_label' => 'name',
                 'placeholder'  => '',
-                'query_builder' => function (EntityRepository $er) {
+                'query_builder' => static function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
                               ->orderBy('u.name', 'ASC');
                 },
-            ])
-            ->add('condition', EntityType::class, [
-                'class'        => Condition::class,
-                'choice_label' => 'name',
-                'placeholder'  => '',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('u')
-                              ->orderBy('u.name', 'ASC');
-                },
-            ])
-            ->add('count', NumberType::class, [
-
             ])
         ;
     }

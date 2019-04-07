@@ -23,7 +23,6 @@ class SearchController extends AbstractController
         $this->utils = $utils;
     }
 
-
     /**
      * @Route("/search", name="app.search")
      */
@@ -31,7 +30,6 @@ class SearchController extends AbstractController
     {
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
-
 
         $result = [];
         if ($form->isSubmitted() && $form->isValid()) {
