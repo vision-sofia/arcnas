@@ -44,7 +44,7 @@ class MapController extends AbstractController
                         INNER JOIN
                     arc_photo.element e ON w.id = e.world_object_id
                 WHERE
-                    e.id = :element_id
+                    e.element_id = :element_id
                 
             ');
 

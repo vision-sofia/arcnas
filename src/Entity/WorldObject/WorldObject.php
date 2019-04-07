@@ -69,7 +69,7 @@ class WorldObject implements UuidInterface
         $this->name = $name;
     }
 
-    public function getAttributes()
+    public function getAttributes():?array
     {
         return $this->attributes;
     }
