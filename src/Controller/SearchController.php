@@ -10,72 +10,53 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SearchController extends AbstractController
 {
     protected $queryBuilder;
     protected $utils;
+    protected $session;
 
-    public function __construct(QueryBuilder $queryBuilder, Utils $utils)
+    public function __construct(QueryBuilder $queryBuilder, Utils $utils, SessionInterface $session)
     {
         $this->queryBuilder = $queryBuilder;
         $this->utils = $utils;
+        $this->session = $session;
     }
 
     /**
-     * @Route("/search", name="app.search")
+     * @Route("", name="app.index")
      */
     public function index(Request $request): Response
     {
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
 
-        $result = [];
         if ($form->isSubmitted() && $form->isValid()) {
+            $request->request->has('clear');
 
-            $element = $form->get('element')->getData();
-            $condition = $form->get('condition')->getData();
-            $count = (int)$form->get('count')->getData();
+            $this->session->remove('element_id');
 
-            if ($element) {
-                $result = $this->getDoctrine()
-                               ->getRepository(Photo::class)
-                               ->findByCount($element, $condition, $count, $this->queryBuilder)
-                ;
-            }
+            return $this->redirectToRoute('app.index');
         }
 
-        $finalResult = [];
+        $selected = $this->session->get('element_id');
 
-        if ($result) {
+        if ($selected) {
+            $element = $this->getDoctrine()->getRepository(Element::class)->findOneBy([
+                'id' => $selected
+            ]);
 
-            $elements = $this->getDoctrine()->getRepository(Element::class)->findAll();
+            $form->get('element')->setData($element);
 
-            $w = [];
 
-            foreach ($elements as $elementObj) {
-                $id = $elementObj->getId();
-                $w[$id] = [
-                    'id'    => $elementObj->getId(),
-                    'color' => $elementObj->getPrimaryColor(),
-                    'name'  => $elementObj->getName(),
-                ];
-            }
-
-            foreach ($result as $item) {
-                $finalResult[] = [
-                    'item'  => $item,
-                    'marks' => $this->utils->transform($item->getMetadata(), $w),
-                ];
-            }
         }
-        
+
         return $this->render('search/index.html.twig', [
-            'form'   => $form->createView(),
-            'result' => $finalResult,
-            'submitted' => $form->isSubmitted() && $form->isValid(),
-            'searchedElement' => $form->isSubmitted() && $form->isValid() ? $element : null
+            'form' => $form->createView(),
+            'selected' => $selected,
         ]);
     }
 }

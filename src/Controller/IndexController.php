@@ -20,7 +20,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("", name="app.index")
+     * @Route("/photos", name="app.photos")
      */
     public function index(): Response
     {

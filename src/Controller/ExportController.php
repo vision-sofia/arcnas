@@ -2,23 +2,34 @@
 
 namespace App\Controller;
 
+use App\Services\GeoJSON;
 use Doctrine\DBAL\Driver\Connection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/export/objects", name="app.export.")
+ * @Route("/export", name="app.export.")
  */
 class ExportController extends AbstractController
 {
+    protected $session;
+    protected $geoJSON;
+
+    public function __construct(SessionInterface $session, GeoJSON $geoJSON)
+    {
+        $this->session = $session;
+        $this->geoJSON = $geoJSON;
+    }
+
     /**
-     * @Route("", name="all")
+     * @Route("/all", name="all")
      */
-    public function export(Request $request): Response
+    public function all(Request $request): Response
     {
         /** @var Connection $conn */
         $conn = $this->getDoctrine()->getConnection();
@@ -35,40 +46,54 @@ class ExportController extends AbstractController
 
         $stmt->execute();
 
-        $result = [];
+        $result = $this->geoJSON->generateFromResult($stmt);
 
-        while ($row = $stmt->fetch()) {
-            $attributes = json_decode($row['attributes'], true);
+        if ('yes' === $request->query->get('download')) {
+            $response = new Response(json_encode($result));
 
-            if (empty($attributes)) {
-                $attributes = [];
-            }
+            $disposition = HeaderUtils::makeDisposition(
+                HeaderUtils::DISPOSITION_ATTACHMENT,
+                'objects.json'
+            );
 
-            $properties = [
-                    'id' => $row['uuid'],
-                    'name' => $row['name'],
-                ] + $attributes;
+            $response->headers->set('Content-Disposition', $disposition);
 
-            $result[] = [
-                'type' => 'Feature',
-                'properties' => $properties,
-                'geometry' => json_decode($row['coordinates']),
-            ];
+            return $response;
         }
 
-        if ('yes' === $request->query->get('view')) {
-            return new JsonResponse($result);
-        }
+        return new JsonResponse($result);
+    }
 
-        $response = new Response(json_encode($result));
+    /**
+     * @Route("/search", name="search")
+     */
+    public function search(): Response
+    {
+        $elementId = (int)$this->session->get('element_id');
 
-        $disposition = HeaderUtils::makeDisposition(
-            HeaderUtils::DISPOSITION_ATTACHMENT,
-            'objects.json'
-        );
+        /** @var Connection $conn */
+        $conn = $this->getDoctrine()->getConnection();
 
-        $response->headers->set('Content-Disposition', $disposition);
+        $stmt = $conn->prepare('
+                SELECT 
+                    w.uuid,
+                    w.name, 
+                    w.attributes, 
+                    ST_AsGeoJSON(w.coordinates) as coordinates
+                FROM 
+                    arc_world_object.world_object w
+                        INNER JOIN
+                    arc_photo.element e ON w.id = e.world_object_id
+                WHERE
+                    e.element_id = :element_id
+                
+            ');
 
-        return $response;
+        $stmt->bindValue('element_id', $elementId);
+        $stmt->execute();
+
+        $result = $this->geoJSON->generateFromResult($stmt);
+
+        return new JsonResponse($result);
     }
 }

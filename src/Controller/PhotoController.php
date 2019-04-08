@@ -150,6 +150,30 @@ class PhotoController extends AbstractController
                              ->getRepository(WorldObject::class)
                              ->findAll();
 
+        $conn = $this->getDoctrine()->getConnection();
+
+        $stmt = $conn->prepare('
+            SELECT 
+                w.uuid 
+            FROM 
+                arc_world_object.world_object w
+                    INNER JOIN
+                arc_photo.element pe ON w.id = pe.world_object_id
+            WHERE
+                pe.photo_id = :photo_id
+            GROUP BY 
+                w.id
+        ');
+
+        $stmt->bindValue('photo_id', $photo->getId());
+        $stmt->execute();
+
+        $worldObjectsInPhoto = [];
+
+        while($row = $stmt->fetch()) {
+            $worldObjectsInPhoto[] = $row['uuid'];
+        }
+
         return $this->render('photo/index.html.twig', [
             'photo'                      => $photo,
             'marks'                      => $marks,
@@ -161,6 +185,7 @@ class PhotoController extends AbstractController
             'markedElements' => $this->getMarkedElements($elements, $marks),
             'worldObjectForm' => $worldObjectForm->createView(),
             'worldObjects' => $worldObjects,
+            'worldObjectsInPhoto' => $worldObjectsInPhoto,
         ]);
     }
 

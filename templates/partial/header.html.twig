@@ -7,11 +7,18 @@
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-end">
             <div class="navbar-item">
-                <a class="button is-info mlr10" href="{{ path('app.search') }}">
+                <a class="button is-info mlr10" href="{{ path('app.index') }}">
                       <span class="icon is-small">
                           <i class="fas fa-map-marked-alt"></i>
                         </span>
                     <strong>Карта</strong>
+                </a>
+
+                <a class="button is-info mlr10" href="{{ path('app.photos') }}">
+                      <span class="icon is-small">
+                          <i class="fas fa-camera"></i>
+                        </span>
+                    <strong>Снимки</strong>
                 </a>
 
                 {#<a class="button is-info mlr10" href="{{ path('app.charts') }}">

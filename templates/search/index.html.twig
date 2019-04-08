@@ -2,27 +2,8 @@
 
 {% block body %}
     <div class="container">
-        <div class="section pb-5">
-            <h1 class="title">Търсене</h1>
+        <div class="section pb-5 ">
             {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'search-form'}}) }}
-
-{#            <div class="columns">
-                <div class="column is-one-quarter">
-                    <div class="itemType">
-                        <label class="label">Тип на обекта</label>
-                        <div class="control has-icons-left">
-                            <div class="select">
-                                {{ form_widget(form.element, {'id': 'select-element-form'}) }}
-                            </div>
-                            <span class="icon is-small is-left"><i class="fas fa-building"></i></span>
-                        </div>
-                        <a class="button is-warning mtb10"
-                           id="submit-button"
-                           onclick="searchObjects()">Търси</a>
-                    </div>
-                </div>
-            </div>#}
-
             <div class="form-row align-items-center itemType">
                 <div class="col-auto my-1">
                     <div class="select">
@@ -30,68 +11,18 @@
                     </div>
                 </div>
                 <div class="col-auto my-1">
-                    <a class="button is-warning mtb10" id="submit-button" onclick="searchObjects()">Търси</a>
+                    <a class="button text-white btn-primary" id="submit-button" onclick="searchObjects()">Търси</a>
+                    <button type="submit" name="clear" class="button btn-default" >Изчисти</button>
+                    <a href="{{ path('app.export.search') }}" target="_blank" class="button text-white btn-info ml-3">Вземи GeoJSON</a>
                 </div>
             </div>
-
-          {#<div class="form-row align-items-center itemType">
-               <div class="control has-icons-left">
-                   <div class="select">
-                       {{ form_widget(form.element, {'id': 'select-element-form'}) }}
-                   </div>
-                   <span class="icon is-small is-left"><i class="fas fa-building"></i></span>
-               </div>
-              <a class="button is-warning mtb10" id="submit-button" onclick="searchObjects()">Търси</a>
-
-            </div>#}
-
-          {#  <div class="columns">
-                <div class="column is-one-quarter">
-                    <div class="itemType">
-                        <div class="control has-icons-left">
-                            <div class="select">
-                                {{ form_widget(form.element, {'id': 'select-element-form'}) }}
-                            </div>
-                            <span class="icon is-small is-left"><i class="fas fa-building"></i></span>
-                        </div>
-                        <a class="button is-warning mtb10" id="submit-button" onclick="searchObjects()">Търси</a>
-                    </div>
-                </div>
-            </div>#}
-
             {{ form_end(form) }}
         </div>
     </div>
 
     <div class="container-fluid p-0">
-        <div id="search-map" style="width: 100%; height: calc(100vh - 400px);"></div>
+        <div id="search-map" style="width: 100%; height: calc(100vh - 300px);"></div>
     </div>
-
-    <div class="container">
-        <div class="section" style="padding-top: 0; padding-bottom: 0;">
-            {% if submitted and result is empty %}
-                <div class="notification">
-                    Няма намерени резултати
-                </div>
-            {% endif %}
-
-            {% for item in result %}
-                <div class="thumb">
-                    <div style="display: flex;">
-                        <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}">
-                            <img src="/media/{{ item.item.file }}" alt="" />
-                            {% for mark in item.marks %}
-                                {% if mark.element.id == searchedElement.id %}
-                                    <div class="rect passive-rect rect-type-{{ mark.element.id }}" style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
-                                {% endif %}
-                            {% endfor %}
-                        </a>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-
 
     <script>
         let blueIcon = new L.Icon({
@@ -133,7 +64,7 @@
         let map;
 
         function mapInit(coordinates) {
-            let map = L.map('search-map').setView(coordinates, 13);
+            let map = L.map('search-map').setView(coordinates, 14);
 
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
                 maxZoom: 18,
@@ -166,7 +97,7 @@
             }
 
             $.ajax({
-                url: '/api/map?element=' + elementVal,
+                url: '/api/search?element=' + elementVal,
                 type: 'GET',
                 success: geojsonFeatures => {
                     geoJSON = geojsonFeatures;
@@ -183,6 +114,10 @@
                 markers[markerId] = createMarker(feature.geometry.coordinates, markerId);
             });
         }
+
+        {% if selected is not null %}
+            loadObjects({{ selected }});
+        {% endif %}
     </script>
 
 {% endblock %}

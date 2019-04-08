@@ -1,12 +1,12 @@
-## ArcNas
+# ArcNas
 
-[Хакатон за София](https://vizia.sofia.bg/hackathon)
+Визуално индексиране на градската среда
 
 
 ## Демо
-url: https://arcnas.dreamradio.org  
-user: arc  
-pass: nas 
+URL: https://arcnas.dreamradio.org  
+username: demo  
+password: demo 
 
 ## Софтуер
 
@@ -19,7 +19,7 @@ PostGIS 2.5
 
 ## Инсталиране
 ```
-$composer install  
-$bin/console doctrine:migrations:migrate  
-$bin/console doctrine:fixtures:load
+$ composer install  
+$ bin/console doctrine:migrations:migrate  
+$ bin/console doctrine:fixtures:load
 ```

@@ -2,48 +2,50 @@
 
 {% block body %}
     <div class="container">
+        <div class="section">
+            <h1 class="title">Снимки</h1>
+            {#
+                <div style="margin-top: 30px;margin-bottom: 30px;">
+                    <a class="btn btn-sm btn-default" href="{{ path('app.export.all') }}"><i class="fa fa-download"></i></a>
+                    <a class="btn btn-sm btn-primary" href="{{ path('app.export.all', {'view': 'yes'}) }}">Изтегли GeoJson</a>
+                </div>#}
 
-    <div style="margin-top: 30px;margin-bottom: 30px;">
-        <a class="btn btn-sm btn-default" href="{{ path('app.export.all') }}"><i class="fa fa-download"></i></a>
-        <a class="btn btn-sm btn-primary" href="{{ path('app.export.all', {'view': 'yes'}) }}">Изтегли GeoJson</a>
-    </div>
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                {% for item in photos %}
+                    <div class="thumb">
+                        <div style="display: flex;">
+                            <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}">
+                                <img src="/media/{{ item.item.file }}" alt=""/>
+                                {% for mark in item.marks %}
+                                    <div class="rect passive-rect rect-type-{{ mark.element.id }}"
+                                         style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
+                                {% endfor %}
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
 
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        {% for item in photos %}
-            <div class="thumb">
-                <div style="display: flex;">
-                    <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}">
-                        <img src="/media/{{ item.item.file }}" alt="" />
-                        {% for mark in item.marks %}
-                            <div class="rect passive-rect rect-type-{{ mark.element.id }}"
-                                 style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
-                        {% endfor %}
-                    </a>
+            {% else %}
+
+                <div class="notification">
+                    Влезте в профила си, за да добавяте или индексирате снимки.
                 </div>
-            </div>
-        {% endfor %}
+
+                {% for item in photos %}
+                    <div class="thumb">
+                        <div style="display: flex;">
+                            <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}">
+                                <img src="/media/{{ item.item.file }}" alt=""/>
+                                {% for mark in item.marks %}
+                                    <div class="rect passive-rect rect-type-{{ mark.element.id }}"
+                                         style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
+                                {% endfor %}
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
-    {% else %}
-
-        <div class="notification">
-            Влезте в профила си, за да добавяте или индексирате снимки.
-        </div>
-
-        {% for item in photos %}
-            <div class="thumb">
-                <div style="display: flex;">
-                    <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}">
-                        <img src="/media/{{ item.item.file }}" alt="" />
-                        {% for mark in item.marks %}
-                            <div class="rect passive-rect rect-type-{{ mark.element.id }}"
-                                 style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
-                        {% endfor %}
-                    </a>
-                </div>
-            </div>
-        {% endfor %}
-    {% endif %}
-
     </div>
 
     {#{% for photo in photos %}
