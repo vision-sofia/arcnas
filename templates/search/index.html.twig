@@ -71,38 +71,29 @@
             popupAnchor: [1, -34],
             shadowSize: [41, 41]
         });
-
         function goToMarker(markerId) {
             window.location.href = '/marker/' + markerId;
         }
-
         function createMarker(position, markerId) {
             // marker ias actibe by default on create
             var marker = new L.marker(position, {
                 icon: blueIcon,
                 draggable: 'false'
             });
-
             marker.on('dragend', function(event) {
                 onDrag(marker);
             });
-
             if (markerId) {
                 marker.on('click', function(event) {
                     goToMarker(markerId);
                 });
             }
-
             map.addLayer(marker);
-
             return marker;
         }
-
-
         var geoJSON;
         var markers = {};
         var map;
-
         function mapInit(coordinates) {
             var map = L.map('search-map').setView(coordinates, 13);
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -112,10 +103,8 @@
                     'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 id: 'mapbox.streets'
             }).addTo(map);
-
             return map;
         }
-
         function searchObjects() {
             let valid = true;
             let elementVal = $('.search-form .itemType select').val();
@@ -123,13 +112,11 @@
                 $('.search-form .itemType .select').addClass('is-danger');
                 valid = false;
             }
-
             if (valid) {
                 loadObjects(elementVal);
             }
             return;
         }
-
         function loadObjects(elementVal) {
             if (map) {
                 map.remove();
@@ -144,7 +131,6 @@
                 }
             });
         }
-
         function createMarkersFromGeoJSON() {
             markers = [];
             geoJSON.forEach(feature => {

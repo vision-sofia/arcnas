@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <h1>Елементи</h1>
+
+        <div class="mb-3">
+            <a class="btn btn-sm btn-primary" href="{{ path('app.attributes.add') }}">Добави елемент</a>
+        </div>
+
+        <table class="table thead-light table-sm">
+            <thead>
+            <tr>
+                <th>Име</th>
+                <th>Атрибут</th>
+                <th>Цвят</th>
+            </tr>
+            </thead>
+            {% for attribute in attributes %}
+                <tr>
+                    <td><a href="{{ path('app.attributes.edit', {'uuid': attribute.uuid }) }}">{{ attribute.name }}</a></td>
+                    <td>{{ attribute.attributeName }}</td>
+                    <td style="color:{{ attribute.primaryColor }};">{{ attribute.primaryColor }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

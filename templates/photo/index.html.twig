@@ -55,8 +55,8 @@
                 {% if worldObject.id is defined %}
                 {{ form_widget(form.coordinates, {'id': 'coordinates', 'attr': { 'hidden': 'hidden'}}) }}
 
-                <div class="columns">
-                    <div class="column is-half">
+
+
                         <div class="itemType">
                             <label class="label">Тип на обекта</label>
                             <div class="control has-icons-left">
@@ -66,8 +66,8 @@
                                 <span class="icon is-small is-left"><i class="fas fa-building"></i></span>
                             </div>
                         </div>
-                    </div>
-                    <div class="column is-half">
+
+                    {#<div class="column is-half">
                         <div class="itemCondition">
                             <label class="label">Състояние</label>
                             <div class="control has-icons-left">
@@ -77,8 +77,8 @@
                                 <span class="icon is-small is-left"><i class="fas fa-highlighter"></i></span>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div>#}
+
 
                 {#<button type="submit">test</button>#}
                 <a class="button is-warning mtb10"
@@ -263,12 +263,20 @@
             success: geojsonFeatures => {
                 geoJSON = geojsonFeatures;
                 createMarkersFromGeoJSON();
+
+                let mapCenter = [42.697687,23.3209635];
+
                 {%  if worldObject.uuid is defined %}
-                var initCoordinates = markers['{{ worldObject.uuid }}'].getLatLng();
-                var mapCenter = initCoordinates;
+                    let initCoordinates = markers['{{ worldObject.uuid }}'].getLatLng();
+                    mapCenter = initCoordinates;
                 {%  else %}
-                var mapCenter = geojsonFeatures[0].geometry.coordinates.reverse();
+
+                if(!geojsonFeatures) {
+                    mapCenter = geojsonFeatures[0].geometry.coordinates.reverse();
+                }
+
                 {%  endif %}
+                console.log(mapCenter);
                 map = mapInit(mapCenter);
 
                 Object.keys(markers).forEach(i => {

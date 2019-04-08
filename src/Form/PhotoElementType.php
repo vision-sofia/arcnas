@@ -27,11 +27,11 @@ class PhotoElementType extends AbstractType
                               ->orderBy('u.name', 'ASC');
                 },
             ])
-            ->add('condition', EntityType::class, [
+/*            ->add('condition', EntityType::class, [
                 'class'        => Condition::class,
                 'choice_label' => 'name',
                 'placeholder'  => '',
-            ])
+            ])*/
             ->add('coordinates', TextType::class, [
                 'mapped' => false,
             ])

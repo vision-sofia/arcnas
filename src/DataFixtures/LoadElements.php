@@ -26,10 +26,13 @@ class LoadElements extends Fixture
     private function data(): array
     {
         return [
-            ['Счупен процорец', '#00FF00', '_broken_window'],
-            ['Рампа', '#FFFF00', '_ramp'],
-            ['Климатик', '#00FFFF', '_air_conditioner'],
-            ['Графити', '#FF00FF', '_graffiti'],
+            ['Различен цвят саниране спрямо фасада', '#00FF00', 'different_color_san'],
+            ['Намеса във фасадата', '#00FF00', 'namesa_v_fasadata'],
+            ['Възможно необитаемо помещение', '#00FF00', 'potential_empty'],
+            ['Счупен процорец', '#00FF00', 'broken_window'],
+            ['Рампа за трудно подвижни хора', '#FFFF00', 'ramp'],
+            ['Климатик', '#00FFFF', 'air_conditioner'],
+            ['Кръгло-квадратен прозорец 0_o', '#00FF00', 'O_o_window'],
         ];
     }
 }

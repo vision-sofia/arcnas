@@ -44,15 +44,6 @@ class PhotoController extends AbstractController
      */
     public function index(Request $request, Photo $photo, \App\Services\Database\Photo $photoDatabaseService): Response
     {
-
-        $p = new Point(1,2);
-        $w = new WorldObject();
-        $w->setCoordinates($p);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($w);
-       # $em->flush();
-
         $photoElement = new PhotoElement();
         $photoElement->setPhoto($photo);
 
