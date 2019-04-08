@@ -7,19 +7,11 @@
     <div id="navbarBasicExample" class="navbar-menu">
         <div class="navbar-end">
             <div class="navbar-item">
-
-                <a class="button is-info mlr10" href="{{ path('app.index') }}">
-                      <span class="icon is-small">
-                          <i class="fas fa-home"></i>
-                        </span>
-                    <strong>Начало</strong>
-                </a>
-
                 <a class="button is-info mlr10" href="{{ path('app.search') }}">
                       <span class="icon is-small">
-                          <i class="fas fa-search"></i>
+                          <i class="fas fa-map-marked-alt"></i>
                         </span>
-                    <strong>Търси</strong>
+                    <strong>Карта</strong>
                 </a>
 
                 {#<a class="button is-info mlr10" href="{{ path('app.charts') }}">
@@ -28,14 +20,6 @@
                         </span>
                     <strong>Анализ</strong>
                 </a>#}
-
-
-                <a class="button is-info mlr10" href="{{ path('app.map') }}">
-                      <span class="icon is-small">
-                          <i class="fas fa-map-marked-alt"></i>
-                        </span>
-                    <strong>Карта</strong>
-                </a>
 
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <a class="button is-warning mlr10" href="{{ path('app.upload') }}">
@@ -47,7 +31,7 @@
 
                     <a class="button is-info mlr10" href="{{ path('app.attributes.index') }}">
                         <span class="icon is-small">
-                          <i class="fas fa-upload"></i>
+                          <i class="fas fa-tags"></i>
                         </span>
                         <strong>Атрибути</strong>
                     </a>
@@ -61,6 +45,13 @@
                     </a>
                     <a class="button is-warning mlr10" href="{{ path('app.sign-in') }}">Вход</a>
                 {% endif %}
+
+                <a class="button is-info mlr10" href="{{ path('app.map') }}">
+                      <span class="icon is-small">
+                          <i class="fas fa-cube"></i>
+                        </span>
+                    <strong>3D Карта</strong>
+                </a>
             </div>
         </div>
     </div>

@@ -4,18 +4,16 @@
     <div class="container">
 
     <div style="margin-top: 30px;margin-bottom: 30px;">
-        <a href="{{ path('app.world-objects.download') }}"><i class="fa fa-download"></i></a> <a
-                href="{{ path('app.world-objects.download', {'view': 'yes'}) }}">Изтегли GeoJson</a>
+        <a class="btn btn-sm btn-default" href="{{ path('app.export.all') }}"><i class="fa fa-download"></i></a>
+        <a class="btn btn-sm btn-primary" href="{{ path('app.export.all', {'view': 'yes'}) }}">Изтегли GeoJson</a>
     </div>
-
-    <h1 class="title">Снимки</h1>
 
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
         {% for item in photos %}
             <div class="thumb">
                 <div style="display: flex;">
                     <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}">
-                        <img src="/media/{{ item.item.file }}" alt=""/>
+                        <img src="/media/{{ item.item.file }}" alt="" />
                         {% for mark in item.marks %}
                             <div class="rect passive-rect rect-type-{{ mark.element.id }}"
                                  style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
@@ -35,7 +33,7 @@
             <div class="thumb">
                 <div style="display: flex;">
                     <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}">
-                        <img src="/media/{{ item.item.file }}" alt=""/>
+                        <img src="/media/{{ item.item.file }}" alt="" />
                         {% for mark in item.marks %}
                             <div class="rect passive-rect rect-type-{{ mark.element.id }}"
                                  style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>

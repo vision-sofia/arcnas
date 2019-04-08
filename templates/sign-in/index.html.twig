@@ -2,31 +2,30 @@
 
 {% block body %}
     <div class="container">
-        <div class="section">
-            <h1 class="title">Вход в профила</h1>
+        <div class="row justify-content-md-center mt-5">
+            <div class="col-md-auto">
+                <h1 class="title">Вход в профила</h1>
+                <form action="{{ path('app.sign-in') }}" method="post" class="login-form">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            <form action="{{ path('app.sign-in') }}" method="post" class="login-form">
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <div class="field">
+                        <p class="control has-icons-left has-icons-right">
+                            <input name="_username" class="input" type="text" placeholder="Име">
+                            <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input name="_password" class="input" type="password" placeholder="Парола">
+                            <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                        </p>
+                    </div>
 
-                <div class="field">
-                    <p class="control has-icons-left has-icons-right">
-                        <input name="_username" class="input" type="text" placeholder="Име">
-                        <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
-                    </p>
-                </div>
-                <div class="field">
-                    <p class="control has-icons-left">
-                        <input name="_password" class="input" type="password" placeholder="Парола">
-                        <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
-                    </p>
-                </div>
-
-                <a class="button is-warning mtb10"
-                   id="submit-button"
-                   onclick="userCtrl.signIn()">Влез</a>
-
-            </form>
+                    <a class="button is-warning mtb10"
+                       id="submit-button"
+                       onclick="userCtrl.signIn()">Влез</a>
+                </form>
+            </div>
         </div>
     </div>
-
 {% endblock %}

@@ -4,25 +4,31 @@ namespace App\Controller;
 
 use App\Entity\ConfigurationList\Element;
 use App\Entity\Photo;
-
+use App\Entity\PhotoElement;
 use App\Entity\WorldObject\WorldObject;
 use App\Form\Type\WorldObjectType;
 use App\Services\Utils;
 use CrEOF\Spatial\PHP\Types\Geography\Point;
 use Doctrine\DBAL\Driver\Connection;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/world-objects", name="app.world-objects.")
+ * @Route("/objects", name="app.objects.")
  */
 class WorldObjectController extends AbstractController
 {
+    protected $utils;
+
+    public function __construct(Utils $utils)
+    {
+        $this->utils = $utils;
+    }
+
     /**
      * @Route("", name="index")
      */
@@ -43,21 +49,71 @@ class WorldObjectController extends AbstractController
             $em->persist($worldObject);
             $em->flush();
 
-            return $this->redirectToRoute('app.world-objects.index');
+            return $this->redirectToRoute('app.objects.index');
         }
 
         $worldObjects = $this->getDoctrine()->getRepository(WorldObject::class)->findAll();
 
         return $this->render('world-object/index.html.twig', [
             'form' => $form->createView(),
-            'worldObjects' => $worldObjects
+            'worldObjects' => $worldObjects,
         ]);
     }
 
     /**
-     * @Route("/download", name="download")
+     * @Route("/{uuid}", name="view", methods={"GET"})
+     * @ParamConverter("element", class="App\Entity\WorldObject\WorldObject", options={"mapping": {"uuid": "uuid"}})
      */
-    public function download(Request $request): Response
+    public function view(WorldObject $worldObject): Response
+    {
+        $photos = $this->getDoctrine()
+            ->getRepository(Photo::class)
+            ->findAll();
+
+        $elements = $this->getDoctrine()
+            ->getRepository(Element::class)
+            ->findAll();
+
+        $w = [];
+
+        foreach ($elements as $element) {
+            $id = $element->getId();
+            $w[$id] = [
+                'id' => $element->getId(),
+                'color' => $element->getPrimaryColor(),
+                'name' => $element->getName(),
+            ];
+        }
+
+        $finalResult = [];
+
+        foreach ($photos as $item) {
+            $finalResult[] = [
+                'item' => $item,
+                'marks' => $this->utils->transform($item->getMetadata(), $w),
+            ];
+        }
+
+        $attributes = $this->getDoctrine()
+            ->getRepository(PhotoElement::class)
+            ->findBy(['worldObject' => $worldObject]);
+
+        return $this->render('world-object/view.html.twig', [
+            'photos' => $finalResult,
+            'worldObject' => $worldObject,
+            'attributes' => $attributes,
+            'center' => [
+                'x' => $worldObject->getCoordinates()->getX(),
+                'y' => $worldObject->getCoordinates()->getY(),
+            ],
+        ]);
+    }
+
+    /**
+     * @Route("/{uuid}/download", name="download.one", methods={"GET"})
+     * @ParamConverter("element", class="App\Entity\WorldObject\WorldObject", options={"mapping": {"uuid": "uuid"}})
+     */
+    public function download(WorldObject $worldObject): Response
     {
         /** @var Connection $conn */
         $conn = $this->getDoctrine()->getConnection();
@@ -70,8 +126,11 @@ class WorldObjectController extends AbstractController
                     ST_AsGeoJSON(w.coordinates) as coordinates
                 FROM 
                     arc_world_object.world_object w
+                WHERE
+                    id = :id
             ');
 
+        $stmt->bindValue('id', $worldObject->getId());
         $stmt->execute();
 
         $result = [];
@@ -95,19 +154,6 @@ class WorldObjectController extends AbstractController
             ];
         }
 
-        if ($request->query->get('view') === 'yes') {
-            return new JsonResponse($result);
-        }
-
-        $response = new Response(json_encode($result));
-
-        $disposition = HeaderUtils::makeDisposition(
-            HeaderUtils::DISPOSITION_ATTACHMENT,
-            'objects.json'
-        );
-
-        $response->headers->set('Content-Disposition', $disposition);
-
-        return $response;
+        return new JsonResponse($result);
     }
 }

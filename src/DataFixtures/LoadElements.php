@@ -26,10 +26,14 @@ class LoadElements extends Fixture
     private function data(): array
     {
         return [
-            ['Различен цвят саниране спрямо фасада', '#00FF00', 'different_color_san'],
-            ['Намеса във фасадата', '#00FF00', 'namesa_v_fasadata'],
-            ['Възможно необитаемо помещение', '#00FF00', 'potential_empty'],
-            ['Счупен процорец', '#00FF00', 'broken_window'],
+            ['Заличени декоративни елементи', '#00FF00', 'erased_decoration'],
+            ['Саниране', '#00FF00', 'sanirane'],
+            ['Без саниране', '#00FF00', 'bez_sanirane'],
+            ['Рушаща се фасада с декоративни елементи', '#00FF00', 'ruin_facade'],
+            ['Различен цвят саниране спрямо фасада', '#00FF00', 'different_color_isolation'],
+            ['Намеса в облика на фасадата', '#00FF00', 'namesa_vuv_fasadata'],
+            ['Вероятно необитаемо помещение', '#00FF00', 'potential_empty_room'],
+            ['Счупен прозорец', '#00FF00', 'broken_window'],
             ['Рампа за трудно подвижни хора', '#FFFF00', 'ramp'],
             ['Климатик', '#00FFFF', 'air_conditioner'],
             ['Кръгло-квадратен прозорец 0_o', '#00FF00', 'O_o_window'],
