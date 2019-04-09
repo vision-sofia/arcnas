@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -23,10 +24,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class WorldObjectController extends AbstractController
 {
     protected $utils;
+    protected $session;
 
-    public function __construct(Utils $utils)
+    public function __construct(Utils $utils, SessionInterface $session)
     {
         $this->utils = $utils;
+        $this->session = $session;
     }
 
     /**
@@ -87,13 +90,38 @@ class WorldObjectController extends AbstractController
 
         $finalResult = [];
 
+        $searchedElement = $this->session->get('element_id');
+
         foreach ($photos as $item) {
             foreach ($item->getElements() as $element) {
-                if($element->getWorldObject() === $worldObject) {
+
+                if ($element->getWorldObject() === $worldObject) {
+
+                    if (isset($finalResult[$worldObject->getId()])) {
+                        continue;
+                    }
+                    $marks = $this->utils->transform($item->getMetadata(), $w);
+
+                    $fm = [];
+
+                    if ($searchedElement) {
+                        foreach ($marks as $mark) {
+                            if ($mark['element_id'] === $searchedElement) {
+                                $fm[] = $mark;
+                            }
+                        }
+                    } else {
+                        $fm = $marks;
+                    }
+
                     $finalResult[$worldObject->getId()] = [
                         'item' => $item,
-                        'marks' => $this->utils->transform($item->getMetadata(), $w),
+                        'marks' => $fm,
+
+
                     ];
+
+
                 }
             }
 
