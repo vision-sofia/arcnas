@@ -50,8 +50,6 @@ class SearchController extends AbstractController
             ]);
 
             $form->get('element')->setData($element);
-
-
         }
 
         return $this->render('search/index.html.twig', [

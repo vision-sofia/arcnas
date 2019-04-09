@@ -3,7 +3,6 @@
 
 namespace App\Services;
 
-
 use Doctrine\DBAL\Driver\Statement;
 
 class GeoJSON

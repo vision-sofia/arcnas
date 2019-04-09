@@ -3,7 +3,6 @@
 
 namespace App\Services;
 
-
 class Utils
 {
     public function transform(array $metadata, array $elements): array
@@ -12,7 +11,6 @@ class Utils
 
         if (!empty($metadata['sectors'])) {
             foreach ($metadata['sectors'] as $k => $v) {
-
                 $v['element'] = $elements[$v['element_id']];
                 $v['geo'] = json_decode($v['geo'], true);
                 $v['position'] = [

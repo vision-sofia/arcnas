@@ -2,7 +2,6 @@
 
 namespace App\Form\Type;
 
-
 use App\Entity\ConfigurationList\Condition;
 use App\Entity\ConfigurationList\Element;
 use App\Entity\PhotoElement;

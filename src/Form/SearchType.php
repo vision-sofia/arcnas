@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-
 use App\Entity\ConfigurationList\Condition;
 use App\Entity\ConfigurationList\Element;
 use App\Entity\PhotoElement;
@@ -33,6 +32,5 @@ class SearchType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-
     }
 }

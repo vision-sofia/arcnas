@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Entity\Traits\TraceTrait;
 use App\Entity\Traits\UUIDableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -33,6 +35,20 @@ class Photo implements UuidInterface, TraceableInterface, UploadableFileInterfac
      */
     private $metadata;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PhotoElement", mappedBy="photo")
+     */
+    private $elements;
+
+    /**
+     * Photo constructor.
+     */
+    public function __construct()
+    {
+        $this->elements = new ArrayCollection();
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -57,5 +73,17 @@ class Photo implements UuidInterface, TraceableInterface, UploadableFileInterfac
     public function getMetadata()
     {
         return $this->metadata;
+    }
+
+    /** @return PhotoElement[]|Collection */
+    public function getElements():?Collection
+    {
+        return $this->elements;
+    }
+
+
+    public function setElements($elements): void
+    {
+        $this->elements = $elements;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\EventSubscriber;
 
-
 use App\Event\Events;
 use App\Event\PhotoElementTouchEvent;
 use App\Services\Database\PhotoElement;

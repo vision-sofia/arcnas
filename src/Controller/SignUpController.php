@@ -29,7 +29,6 @@ class SignUpController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $password = $this->passwordEncoder->encodePassword($user, $user->getPlainPassword());
 
             $user->setPassword($password);
@@ -43,7 +42,6 @@ class SignUpController extends AbstractController
             $this->addFlash('success', 'Регистрацията е успешна!');
 
             return $this->redirectToRoute('app.index');
-
         }
 
         return $this->render('sign-up/index.html.twig', [

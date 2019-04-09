@@ -88,10 +88,15 @@ class WorldObjectController extends AbstractController
         $finalResult = [];
 
         foreach ($photos as $item) {
-            $finalResult[] = [
-                'item' => $item,
-                'marks' => $this->utils->transform($item->getMetadata(), $w),
-            ];
+            foreach ($item->getElements() as $element) {
+                if($element->getWorldObject() === $worldObject) {
+                    $finalResult[$worldObject->getId()] = [
+                        'item' => $item,
+                        'marks' => $this->utils->transform($item->getMetadata(), $w),
+                    ];
+                }
+            }
+
         }
 
         $attributes = $this->getDoctrine()

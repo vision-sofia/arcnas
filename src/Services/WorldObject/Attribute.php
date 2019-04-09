@@ -3,7 +3,6 @@
 
 namespace App\Services\WorldObject;
 
-
 use Doctrine\ORM\EntityManagerInterface;
 
 class Attribute

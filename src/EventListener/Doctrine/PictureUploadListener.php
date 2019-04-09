@@ -48,7 +48,7 @@ class PictureUploadListener
             if (!$this->filesystem->exists($this->uploader->getTargetDirectory() . '/' . $fileName)) {
                 $entity->setFile(null);
             } else {
-              #  $entity->setFile(new File($this->uploader->getTargetDirectory() . '/' . $fileName));
+                #  $entity->setFile(new File($this->uploader->getTargetDirectory() . '/' . $fileName));
                 $entity->setFile($fileName);
             }
         }
@@ -56,7 +56,6 @@ class PictureUploadListener
 
     private function uploadFile($entity): void
     {
-
         if (!$entity instanceof UploadableFileInterface) {
             return;
         }

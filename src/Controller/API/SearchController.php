@@ -62,7 +62,6 @@ class SearchController extends AbstractController
 
             $stmt->bindValue('element_id', $elementId);
             $stmt->execute();
-
         } else {
             $stmt = $conn->prepare('
                 SELECT 

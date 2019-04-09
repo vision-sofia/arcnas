@@ -31,8 +31,7 @@ class PhotoController extends AbstractController
         EventDispatcherInterface $eventDispatcher,
         SessionInterface $session,
         \App\Services\Database\Photo $photoDatabaseService
-    )
-    {
+    ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->session = $session;
         $this->photoDatabaseService = $photoDatabaseService;
@@ -124,14 +123,14 @@ class PhotoController extends AbstractController
         $worldObjectForm = $this->createForm(WorldObjectType::class);
         $worldObjectForm->handleRequest($request);
 
-        if($worldObjectForm->isSubmitted() && $worldObjectForm->isValid()) {
+        if ($worldObjectForm->isSubmitted() && $worldObjectForm->isValid()) {
             /** @var WorldObject $worldObject */
             $worldObject = $worldObjectForm->getData();
             $coordinates = $worldObjectForm->get('coordinates')->getData();
 
             $coordinates = explode(',', $coordinates);
 
-            if(isset($coordinates[0], $coordinates[1])) {
+            if (isset($coordinates[0], $coordinates[1])) {
                 $lat = (float)$coordinates[0];
                 $lng = (float)$coordinates[1];
 
@@ -170,7 +169,7 @@ class PhotoController extends AbstractController
 
         $worldObjectsInPhoto = [];
 
-        while($row = $stmt->fetch()) {
+        while ($row = $stmt->fetch()) {
             $worldObjectsInPhoto[] = $row['uuid'];
         }
 
@@ -243,7 +242,6 @@ class PhotoController extends AbstractController
             $this->photoDatabaseService->updateMetadata($photo->getId());
 
             return $this->redirectToRoute('app.photo.wo', ['uuid' => $photo->getUuid(), 'wo' => $worldObject->getUuid()]);
-
         }
 
         $elements = $this->getDoctrine()->getRepository(Element::class)->findAll();
@@ -324,14 +322,14 @@ class PhotoController extends AbstractController
         $worldObjectForm = $this->createForm(WorldObjectType::class);
         $worldObjectForm->handleRequest($request);
 
-        if($worldObjectForm->isSubmitted() && $worldObjectForm->isValid()) {
+        if ($worldObjectForm->isSubmitted() && $worldObjectForm->isValid()) {
             /** @var WorldObject $worldObject */
             $worldObject = $worldObjectForm->getData();
             $coordinates = $worldObjectForm->get('coordinates')->getData();
 
             $coordinates = explode(',', $coordinates);
 
-            if(isset($coordinates[0], $coordinates[1])) {
+            if (isset($coordinates[0], $coordinates[1])) {
                 $lat = (float)$coordinates[0];
                 $lng = (float)$coordinates[1];
 
@@ -390,7 +388,6 @@ class PhotoController extends AbstractController
 
         if (!empty($metadata['sectors'])) {
             foreach ($metadata['sectors'] as $k => $v) {
-
                 $v['element'] = $elements[$v['element_id']];
                 $v['geo'] = json_decode($v['geo'], true);
                 $v['position'] = [
@@ -400,12 +397,11 @@ class PhotoController extends AbstractController
                     'height' => $v['geo']['coordinates'][0][2][1] - $v['geo']['coordinates'][0][0][1],
                 ];
 
-                if(isset($v['world_object_id']) && $filterByWorldObjectId !== null && $filterByWorldObjectId !== $v['world_object_id']) {
+                if (isset($v['world_object_id']) && $filterByWorldObjectId !== null && $filterByWorldObjectId !== $v['world_object_id']) {
                     continue;
                 }
 
                 $result[] = $v;
-
             }
         }
 

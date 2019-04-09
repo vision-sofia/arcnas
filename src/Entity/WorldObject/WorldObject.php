@@ -89,7 +89,4 @@ class WorldObject implements UuidInterface
     {
         $this->coordinates = $coordinates;
     }
-
-
-
 }

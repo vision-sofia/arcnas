@@ -8,7 +8,6 @@ use App\Entity\Photo;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\Query\ResultSetMapping;
 
-
 class PhotoRepository extends \Doctrine\ORM\EntityRepository
 {
     public function findByCount(Element $element, ?Condition $condition, int $count, QueryBuilder $queryBuilder)

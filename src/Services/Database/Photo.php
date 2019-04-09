@@ -3,7 +3,6 @@
 
 namespace App\Services\Database;
 
-
 use Doctrine\ORM\EntityManagerInterface;
 
 class Photo

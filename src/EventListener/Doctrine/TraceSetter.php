@@ -6,7 +6,6 @@ use App\Entity\TraceableInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-
 class TraceSetter
 {
     protected $user;
@@ -21,7 +20,6 @@ class TraceSetter
         $entity = $args->getEntity();
 
         if ($entity instanceof TraceableInterface) {
-
             $entity->setAddedAt(new \DateTimeImmutable());
 
             if ($this->user->getToken()) {

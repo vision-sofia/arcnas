@@ -2,7 +2,6 @@
 
 namespace App\DataFixtures;
 
-
 use App\Entity\ConfigurationList\Condition;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;

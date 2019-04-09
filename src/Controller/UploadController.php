@@ -23,17 +23,15 @@ class UploadController extends AbstractController
      */
     public function index(Request $request)
     {
-        $photo = new Photo();
-
-        $form = $this->createForm(PictureUploadType::class, $photo);
+        $form = $this->createForm(PictureUploadType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($photo);
+            $em->persist($form->getData());
             $em->flush();
 
-         #   return $this->redirectToRoute('app.index');
+            return $this->redirectToRoute('app.photos');
         }
 
         return $this->render('upload/index.html.twig', [
