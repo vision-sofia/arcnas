@@ -38,9 +38,9 @@ class ExportController extends AbstractController
 
         $elements = $this->exportService->remapElements($elementsRepo->findAll());
 
-        $photoBaseUrl = $request->getBaseUrl() . $this->getParameter('media_upload_dir_relative');
+        $mediaDirUrl = $request->getSchemeAndHttpHost() . $this->getParameter('media_upload_dir_relative');
 
-        $result[] = $this->exportService->buildItem($photo, $photoBaseUrl, $elements);
+        $result[] = $this->exportService->buildItem($photo, $mediaDirUrl, $elements);
 
         return new JsonResponse($result);
     }
@@ -61,14 +61,14 @@ class ExportController extends AbstractController
 
         $result = [];
 
-        $photoBaseUrl = $request->getBaseUrl() . $this->getParameter('media_upload_dir_relative');
+        $mediaDirUrl = $request->getSchemeAndHttpHost() . $this->getParameter('media_upload_dir_relative');
 
         foreach ($photos as $photo) {
             if (empty($photo->getMetadata()) || !isset($photo->getMetadata()['sectors'])) {
                 continue;
             }
 
-            $result[] = $this->exportService->buildItem($photo, $photoBaseUrl, $elements);
+            $result[] = $this->exportService->buildItem($photo, $mediaDirUrl, $elements);
         }
 
         return new JsonResponse($result);
