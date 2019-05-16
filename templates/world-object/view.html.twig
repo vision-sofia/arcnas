@@ -1,32 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
     <div class="container-fluid">
         <div class="row justify-content-md-center mt-3">
             <div class="col col-lg-9">
-                {% for item in photos %}
-
-                    <div class="">
-                        <a href="{{ path('app.photo.wo', {'uuid': item.item.uuid, 'wo': worldObject.uuid}) }}">
-                            <img src="/media/{{ item.item.file }}" alt="" />
-                            {% for mark in item.marks %}
-                                <div class="rect passive-rect rect-type-{{ mark.element.id }}"
-                                     style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
-                            {% endfor %}
-                        </a>
-                    </div>
-                    {#<div style="display: flex;">
-                        <a href="{{ path('app.photo', {'uuid': item.item.uuid}) }}">
-                            <img src="/media/{{ item.item.file }}" alt=""/>
-                            {% for mark in item.marks %}
-                                <div class="rect passive-rect rect-type-{{ mark.element.id }}"
-                                     style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
-                            {% endfor %}
-                        </a>
-                    </div>#}
-
-                {% endfor %}
+                <h2>Снимки на обекта</h2>
+                <div class="row">
+                    {% for item in photos %}
+                        <div class="col-6">
+                            <div class="position-relative">
+                            <a href="{{ path('app.photo.wo', {'uuid': item.item.uuid, 'wo': worldObject.uuid}) }}">
+                                <img src="/media/{{ item.item.file }}" class="wo" alt="" />
+                                {% for mark in item.marks %}
+                                    <div class="rect passive-rect rect-type-{{ mark.element.id }}"
+                                         style="display: block;top: {{ mark.position.top }}%; left: {{ mark.position.left }}%; width: {{ mark.position.width }}%; height: {{ mark.position.height }}%; border-color: {{ mark.element.color }}"></div>
+                                {% endfor %}
+                            </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
             <div class="col col-lg-3">
                 <div id="map" style="position: relative; height: 300px;"></div>
@@ -37,13 +30,6 @@
                 <ul class="mt-3">
                     <li><a href="http://maps.google.com/maps?q={{ center.x }},{{ center.y }}" target="_blank"><i class="fas fa-map-marker-alt"></i> Виж в maps</a></li>
                     <li><a href="http://maps.google.com/maps?q=&layer=c&cbll={{ center.x }},{{ center.y }}&cbp=11,0,0,0,0" target="_blank"><i class="fas fa-map-marker-alt"></i> Виж в street view</a></li>
-                </ul>
-
-                <h5>Атрибути</h5>
-                <ul class="ml-3" style="list-style-type: disc;">
-                {% for attribute in attributes %}
-                    <li>{{ attribute.element.name }}</li>
-                {% endfor %}
                 </ul>
 
                 <script>

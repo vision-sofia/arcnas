@@ -23,33 +23,39 @@
         </div>
         <div class="action-panel">
             {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                <div style="margin-bottom: 30px;">
+                <div>
 
                     <div id="map" style="position: relative; height: 250px;"></div>
 
                     {% if worldObject.uuid is not defined %}
-                        <a class="button is-warning mtb10"
-                           id="add-marker-button"
-                           onclick="addMarker()">Добави обект</a>
+                        <div class="mt-3">
+                            <p class="menu-label">Гео-реферирани обекти</p>
 
-                        {{ form_start(worldObjectForm, {'attr': {'class': 'add-point-form', 'style': 'display: inline' ,'novalidate': 'novalidate'}}) }}
-                        {{ form_widget(worldObjectForm.coordinates, {'id': 'new_point_coordinates', 'attr': {'class': 'form-control'}}) }}
-                        {#<button type="submit">Запази</button>#}
-                        <a class="button is-danger mtb10"
-                           id="save-marker-button"
-                           style="display: none"
-                           onclick="saveMarker()">Запази</a>
-                        <a class="button is-light mtb10"
-                           id="clear-marker-button"
-                           style="display: none"
-                           onclick="clearMarker()">Отказ</a>
-                        {{ form_end(worldObjectForm) }}
+                            {{ form_start(worldObjectForm, {'attr': {'class': 'add-point-form', 'style': 'display: inline' ,'novalidate': 'novalidate'}}) }}
+                            {{ form_widget(worldObjectForm.coordinates, {'id': 'new_point_coordinates', 'attr': {'class': 'form-control'}}) }}
+                            {#<button type="submit">Запази</button>#}
+                            <a class="button is-danger mtb10"
+                               id="save-marker-button"
+                               style="display: none"
+                               onclick="saveMarker()">Запази</a>
+                            <a class="button is-light mtb10"
+                               id="clear-marker-button"
+                               style="display: none"
+                               onclick="clearMarker()">Отказ</a>
+                            {{ form_end(worldObjectForm) }}
 
-                        <ul>
-                        {% for worldObjectInPhotoUuid in worldObjectsInPhoto %}
-                            <li><a href="{{ path('app.photo.wo', {'uuid': photo.uuid, 'wo':  worldObjectInPhotoUuid}) }}">Обект {{ loop.index }}</a></li>
-                        {% endfor %}
-                        </ul>
+                            <ul>
+                                {% for worldObjectInPhotoUuid in worldObjectsInPhoto %}
+                                    <li>
+                                        &bull; <a href="{{ path('app.objects.view', {'uuid': worldObjectInPhotoUuid }) }}">Обект {{ loop.index }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+
+                            <a class="button is-warning mtb10"
+                               id="add-marker-button"
+                               onclick="addMarker()">Гео-реферирай обект на тази снимка</a>
+                        </div>
                     {% else %}
                         <a class="button is-light mtb10" onclick="goToAllMarkers()">Назад към всички обекти</a>
                     {% endif %}
@@ -62,7 +68,7 @@
                         {{ form_widget(form.coordinates, {'id': 'coordinates', 'attr': { 'hidden': 'hidden'}}) }}
 
                         <div class="itemType">
-                            <label class="label">Атрибут</label>
+                            <label class="label">Нов атрибут</label>
                             <div class="control has-icons-left">
                                 <div class="select">
                                     {{ form_widget(form.element, {'attr': {'class': 'form-control'}}) }}
@@ -98,34 +104,42 @@
                     {% endif %}
                     <hr/>
                 {% endif %}
+            {% else %}
+                <div class="mt-3">
+                    <a href="{{ path('app.sign-in') }}" class="button is-primary">Влез, за да индексираш снимката</a>
+                </div>
+            {% endif %}
 
-                <aside class="menu items" style="margin-top: 24px;">
-                    <p class="menu-label">Отбелязани атрибути</p>
-                    <ul class="menu-list">
-                        {% for element in markedElements %}
-                            {% if elementsCount[element.id] is defined %}
-                                <li id="item-{{ element.id }}"
-                                    onmouseover="rectCtrl.showPassiveRects({{ element.id }})"
-                                    onmouseleave="rectCtrl.hidePassiveRects({{ element.id }})">
-                                    <a>
+            <aside class="menu items" style="margin-top: 24px;">
+                <p class="menu-label">Отбелязани атрибути</p>
+                <ul class="menu-list">
+                    {% for element in markedElements %}
+                        {% if elementsCount[element.id] is defined %}
+                            <li id="item-{{ element.id }}"
+                                onmouseover="rectCtrl.showPassiveRects({{ element.id }})"
+                                onmouseleave="rectCtrl.hidePassiveRects({{ element.id }})">
+                                <a>
                                         <span class="tag item-color-mark"
                                               style="color: {{ element.color }};">&bull;</span>
-                                        {{ element.name }}
-                                        <span class="tag is-light"> {{ element.count }} </span>
-                                        {% if areas[element.id] is defined and areas[element.id] is not empty %}
-                                            <span class="is-light">(площ {{ areas[element.id] }}%)</span>
-                                        {% endif %}
-                                    </a>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
-                    <a class="button is-text"
-                       onmouseover="rectCtrl.showAllPassiveRects()"
-                       onmouseleave="rectCtrl.hideAllPassiveRects()">Покажи всички</a>
+                                    {{ element.name }}
+                                    <span class="tag is-light"> {{ element.count }} </span>
+                                    {% if areas[element.id] is defined and areas[element.id] is not empty %}
+                                        <span class="is-light">(площ {{ areas[element.id] }}%)</span>
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <a class="button is-info text-white"
+                   onmouseover="rectCtrl.showAllPassiveRects()"
+                   onmouseleave="rectCtrl.hideAllPassiveRects()">Покажи всички</a>
 
-                </aside>
-            {% endif %}
+                <a class="button is-info"
+                   href="{{ path('api.export.photo.dataset-ml', {'uuid': photo.uuid}) }}">Вземи dataset за ML</a>
+
+            </aside>
+
 
         </div>
     </div>
@@ -196,7 +210,7 @@
             }
 
             function goToMarker(markerId) {
-             //   window.location.href = '/photos/{{ photo.uuid }}/' + markerId;
+                //   window.location.href = '/photos/{{ photo.uuid }}/' + markerId;
                 window.location.href = '/objects/' + markerId;
             }
 

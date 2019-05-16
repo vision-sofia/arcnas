@@ -11,7 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
-    protected $queryBuilder;
     protected $utils;
 
     public function __construct(Utils $utils)
@@ -24,9 +23,13 @@ class IndexController extends AbstractController
      */
     public function index(): Response
     {
-        $photos = $this->getDoctrine()->getRepository(Photo::class)->findAll();
+        $photos = $this->getDoctrine()
+            ->getRepository(Photo::class)
+            ->findAll();
 
-        $elements = $this->getDoctrine()->getRepository(Element::class)->findAll();
+        $elements = $this->getDoctrine()
+            ->getRepository(Element::class)
+            ->findAll();
 
         $w = [];
 

@@ -1,3 +1,4 @@
 parameters:
     locale: 'bg'
     media_upload_dir: '%kernel.project_dir%/public/media'
+    media_upload_dir_relative: '/media'

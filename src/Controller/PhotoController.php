@@ -31,7 +31,8 @@ class PhotoController extends AbstractController
         EventDispatcherInterface $eventDispatcher,
         SessionInterface $session,
         \App\Services\Database\Photo $photoDatabaseService
-    ) {
+    )
+    {
         $this->eventDispatcher = $eventDispatcher;
         $this->session = $session;
         $this->photoDatabaseService = $photoDatabaseService;
@@ -43,6 +44,8 @@ class PhotoController extends AbstractController
      */
     public function index(Request $request, Photo $photo, \App\Services\Database\Photo $photoDatabaseService): Response
     {
+
+
         $photoElement = new PhotoElement();
         $photoElement->setPhoto($photo);
 
@@ -53,9 +56,9 @@ class PhotoController extends AbstractController
         foreach ($elements as $element) {
             $id = $element->getId();
             $w[$id] = [
-                'id'    => $element->getId(),
+                'id' => $element->getId(),
                 'color' => $element->getPrimaryColor(),
-                'name'  => $element->getName(),
+                'name' => $element->getName(),
             ];
         }
 
@@ -146,8 +149,8 @@ class PhotoController extends AbstractController
         }
 
         $worldObjects = $this->getDoctrine()
-                             ->getRepository(WorldObject::class)
-                             ->findAll();
+            ->getRepository(WorldObject::class)
+            ->findAll();
 
         $conn = $this->getDoctrine()->getConnection();
 
@@ -174,12 +177,12 @@ class PhotoController extends AbstractController
         }
 
         return $this->render('photo/index.html.twig', [
-            'photo'                      => $photo,
-            'marks'                      => $marks,
-            'elements'                   => $elements,
-            'elementsCount'              => $elementsCount,
-            'activeElements'             => $activeElements,
-            'areas'                      => $z,
+            'photo' => $photo,
+            'marks' => $marks,
+            'elements' => $elements,
+            'elementsCount' => $elementsCount,
+            'activeElements' => $activeElements,
+            'areas' => $z,
             'referenceElementForCompare' => $referenceElementForCompare,
             'markedElements' => $this->getMarkedElements($elements, $marks),
             'worldObjectForm' => $worldObjectForm->createView(),
@@ -195,6 +198,8 @@ class PhotoController extends AbstractController
      */
     public function wo(Request $request, Photo $photo, WorldObject $worldObject): Response
     {
+
+
         $photoElement = new PhotoElement();
         $photoElement->setPhoto($photo);
         $photoElement->setWorldObject($worldObject);
@@ -252,9 +257,9 @@ class PhotoController extends AbstractController
         foreach ($elements as $element) {
             $id = $element->getId();
             $w[$id] = [
-                'id'    => $element->getId(),
+                'id' => $element->getId(),
                 'color' => $element->getPrimaryColor(),
-                'name'  => $element->getName(),
+                'name' => $element->getName(),
             ];
         }
 
@@ -343,17 +348,17 @@ class PhotoController extends AbstractController
         }
 
         $worldObjects = $this->getDoctrine()
-                             ->getRepository(WorldObject::class)
-                             ->findAll();
+            ->getRepository(WorldObject::class)
+            ->findAll();
 
         return $this->render('photo/index.html.twig', [
-            'photo'                      => $photo,
-            'form'                       => $form->createView(),
-            'marks'                      => $marks,
-            'elements'                   => $elements,
-            'elementsCount'              => $elementsCount,
-            'activeElements'             => $activeElements,
-            'areas'                      => $z,
+            'photo' => $photo,
+            'form' => $form->createView(),
+            'marks' => $marks,
+            'elements' => $elements,
+            'elementsCount' => $elementsCount,
+            'activeElements' => $activeElements,
+            'areas' => $z,
             'referenceElementForCompare' => $referenceElementForCompare,
             'markedElements' => $this->getMarkedElements($elements, $marks),
             'worldObjectForm' => $worldObjectForm->createView(),
@@ -391,9 +396,9 @@ class PhotoController extends AbstractController
                 $v['element'] = $elements[$v['element_id']];
                 $v['geo'] = json_decode($v['geo'], true);
                 $v['position'] = [
-                    'top'    => $v['geo']['coordinates'][0][0][1],
-                    'left'   => $v['geo']['coordinates'][0][0][0],
-                    'width'  => $v['geo']['coordinates'][0][2][0] - $v['geo']['coordinates'][0][0][0],
+                    'top' => $v['geo']['coordinates'][0][0][1],
+                    'left' => $v['geo']['coordinates'][0][0][0],
+                    'width' => $v['geo']['coordinates'][0][2][0] - $v['geo']['coordinates'][0][0][0],
                     'height' => $v['geo']['coordinates'][0][2][1] - $v['geo']['coordinates'][0][0][1],
                 ];
 
@@ -408,7 +413,7 @@ class PhotoController extends AbstractController
         return $result;
     }
 
-    private function getMarkedElements(array $elements, array $marks) : array
+    private function getMarkedElements(array $elements, array $marks): array
     {
         $elementsCount = [];
         foreach ($marks as $mark) {
