@@ -12,8 +12,9 @@
                 </div>
                 <div class="col-auto my-1">
                     <a class="button text-white btn-primary" id="submit-button" onclick="searchObjects()">Търси</a>
-                    <button type="submit" name="clear" class="button btn-default" >Изчисти</button>
-                    <a href="{{ path('app.export.search') }}" target="_blank" class="button text-white btn-info ml-3">Вземи GeoJSON</a>
+                    <button type="submit" name="clear" class="button btn-default">Изчисти</button>
+                    <a href="{{ path('app.export.search') }}" target="_blank" class="button text-white btn-info ml-3">Вземи
+                        GeoJSON</a>
                 </div>
             </div>
             {{ form_end(form) }}
@@ -91,6 +92,7 @@
             }
         }
 
+
         function loadObjects(elementVal) {
             if (map) {
                 map.remove();
@@ -115,9 +117,6 @@
             });
         }
 
-        {% if selected is not null %}
-            loadObjects({{ selected }});
-        {% endif %}
+        loadObjects({{ selected is not null ? selected : '' }});
     </script>
-
 {% endblock %}

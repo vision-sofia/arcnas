@@ -94,37 +94,31 @@ class WorldObjectController extends AbstractController
 
         foreach ($photos as $item) {
             foreach ($item->getElements() as $element) {
-
-                if ($element->getWorldObject() === $worldObject) {
-
-                    if (isset($finalResult[$worldObject->getId()])) {
-                        continue;
-                    }
-                    $marks = $this->utils->transform($item->getMetadata(), $w);
-
-                    $fm = [];
-
-                    if ($searchedElement) {
-                        foreach ($marks as $mark) {
-                            if ($mark['element_id'] === $searchedElement) {
-                                $fm[] = $mark;
-                            }
-                        }
-                    } else {
-                        $fm = $marks;
-                    }
-
-                    $finalResult[$worldObject->getId()] = [
-                        'item' => $item,
-                        'marks' => $fm,
-
-
-                    ];
-
-
+                if ($element->getWorldObject() !== $worldObject) {
+                    continue;
                 }
-            }
 
+                if (isset($finalResult[$worldObject->getId()])) {
+                    continue;
+                }
+
+                $marks = $this->utils->transform($item->getMetadata(), $w);
+
+                $fm = [];
+
+                foreach ($marks as $mark) {
+                    if ($searchedElement && $mark['element_id'] !== $searchedElement) {
+                        $mark['element']['color'] = '#FFFFFF';
+                    }
+
+                    $fm[] = $mark;
+                }
+
+                $finalResult[$worldObject->getId()] = [
+                    'item' => $item,
+                    'marks' => $fm,
+                ];
+            }
         }
 
         $attributes = $this->getDoctrine()
