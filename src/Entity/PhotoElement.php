@@ -23,7 +23,7 @@ class PhotoElement implements UuidInterface, TraceableInterface
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\ConfigurationList\Element")
@@ -36,7 +36,7 @@ class PhotoElement implements UuidInterface, TraceableInterface
     private $condition;
 
     /**
-     * @ORM\Column(name="sector", type="polygon_geom", nullable=true)
+     * @ORM\Column(type="geometry", options={"geometry_type"="POLYGON"})
      */
     private $sector;
 
@@ -44,14 +44,13 @@ class PhotoElement implements UuidInterface, TraceableInterface
      * @ORM\ManyToOne(targetEntity="App\Entity\Photo", inversedBy="elements")
      * @ORM\JoinColumn(referencedColumnName="id", name="photo_id", nullable=false)
      */
-    private $photo;
+    private ?Photo $photo = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\WorldObject\WorldObject")
      * @ORM\JoinColumn(name="world_object_id", referencedColumnName="id", nullable=false)
      */
-    private $worldObject;
-
+    private ?WorldObject $worldObject = null;
 
     public function getId(): ?int
     {

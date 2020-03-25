@@ -4,8 +4,8 @@ namespace App\Entity\WorldObject;
 
 use App\Entity\Traits\UUIDableTrait;
 use App\Entity\UuidInterface;
-use CrEOF\Spatial\PHP\Types\Geography\Point;
 use Doctrine\ORM\Mapping as ORM;
+use Jsor\Doctrine\PostGIS\Types\GeometryType;
 
 /**
  * @ORM\Entity()
@@ -20,22 +20,22 @@ class WorldObject implements UuidInterface
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string")
      */
-    private $name = '';
+    private string $name = '';
 
     /**
-     * @ORM\Column(type="json_array", options={"jsonb": true}, nullable=true)
+     * @ORM\Column(type="json", options={"jsonb": true}, nullable=true)
      */
-    private $attributes;
+    private ?array $attributes = null;
 
     /**
-     * @ORM\Column(name="coordinates", type="point_geog", nullable=true)
+     * @ORM\Column(type="geometry", options={"geometry_type"="POINT"}, nullable=true)
      */
-    private $coordinates;
+    private ?GeometryType $coordinates = null;
 
     /**
      * @return mixed
@@ -69,7 +69,7 @@ class WorldObject implements UuidInterface
         $this->name = $name;
     }
 
-    public function getAttributes():?array
+    public function getAttributes(): ?array
     {
         return $this->attributes;
     }
@@ -80,12 +80,12 @@ class WorldObject implements UuidInterface
         $this->attributes = $attributes;
     }
 
-    public function getCoordinates():?Point
+    public function getCoordinates()
     {
         return $this->coordinates;
     }
 
-    public function setCoordinates(Point $coordinates): void
+    public function setCoordinates($coordinates): void
     {
         $this->coordinates = $coordinates;
     }

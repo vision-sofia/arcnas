@@ -8,8 +8,8 @@ use App\Entity\PhotoElement;
 use App\Entity\WorldObject\WorldObject;
 use App\Form\Type\WorldObjectType;
 use App\Services\Utils;
-use CrEOF\Spatial\PHP\Types\Geography\Point;
 use Doctrine\DBAL\Driver\Connection;
+use Jsor\Doctrine\PostGIS\Types\GeometryType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -44,7 +44,7 @@ class WorldObjectController extends AbstractController
             /** @var WorldObject $worldObject */
             $worldObject = $form->getData();
 
-            $point = new Point(1, 4);
+            $point = new GeometryType();
 
             $worldObject->setCoordinates($point);
 
@@ -72,6 +72,14 @@ class WorldObjectController extends AbstractController
         $photos = $this->getDoctrine()
             ->getRepository(Photo::class)
             ->findAll();
+
+        foreach ($photos as $item) {
+            dump($item->getElements()->count());
+//            dump($item->getElements());
+//            foreach ($item->getElements() as $v) {
+//
+//            }
+        }
 
         $elements = $this->getDoctrine()
             ->getRepository(Element::class)
@@ -146,12 +154,12 @@ class WorldObjectController extends AbstractController
         $conn = $this->getDoctrine()->getConnection();
 
         $stmt = $conn->prepare('
-                SELECT 
+                SELECT
                     w.uuid,
-                    w.name, 
-                    w.attributes, 
+                    w.name,
+                    w.attributes,
                     ST_AsGeoJSON(w.coordinates) as coordinates
-                FROM 
+                FROM
                     arc_world_object.world_object w
                 WHERE
                     id = :id

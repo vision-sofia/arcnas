@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
-    protected $utils;
+    protected Utils $utils;
 
     public function __construct(Utils $utils)
     {

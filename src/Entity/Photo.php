@@ -23,7 +23,7 @@ class Photo implements UuidInterface, TraceableInterface, UploadableFileInterfac
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -31,23 +31,19 @@ class Photo implements UuidInterface, TraceableInterface, UploadableFileInterfac
     private $file;
 
     /**
-     * @ORM\Column(type="json_array", options={"jsonb": true}, nullable=true)
+     * @ORM\Column(type="json", options={"jsonb": true}, nullable=true)
      */
-    private $metadata;
+    private ?array $metadata = null;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\PhotoElement", mappedBy="photo")
      */
-    private $elements;
+    private Collection $elements;
 
-    /**
-     * Photo constructor.
-     */
     public function __construct()
     {
         $this->elements = new ArrayCollection();
     }
-
 
     public function getId(): ?int
     {
@@ -72,15 +68,13 @@ class Photo implements UuidInterface, TraceableInterface, UploadableFileInterfac
 
     public function getMetadata()
     {
-        return $this->metadata;
+        return $this->metadata ?? [];
     }
 
-    /** @return PhotoElement[]|Collection */
-    public function getElements():?Collection
+    public function getElements(): ?Collection
     {
         return $this->elements;
     }
-
 
     public function setElements($elements): void
     {

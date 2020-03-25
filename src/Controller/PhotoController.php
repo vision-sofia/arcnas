@@ -26,7 +26,6 @@ class PhotoController extends AbstractController
     protected $session;
     protected $photoDatabaseService;
 
-
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         SessionInterface $session,
@@ -44,8 +43,6 @@ class PhotoController extends AbstractController
      */
     public function index(Request $request, Photo $photo, \App\Services\Database\Photo $photoDatabaseService): Response
     {
-
-
         $photoElement = new PhotoElement();
         $photoElement->setPhoto($photo);
 
@@ -79,7 +76,7 @@ class PhotoController extends AbstractController
 
         $stmt = $conn->prepare('
             SELECT
-                sum(st_area(sector)) as area, 
+                sum(st_area(sector)) as area,
                 element_id
             FROM
                 arc_photo.element e
@@ -87,7 +84,7 @@ class PhotoController extends AbstractController
                 arc_photo.photo p ON p.id = e.photo_id
             WHERE
                 e.photo_id = :photo_id
-            GROUP BY e.element_id        
+            GROUP BY e.element_id
         ');
 
         $stmt->bindValue('photo_id', $photo->getId());
@@ -155,15 +152,15 @@ class PhotoController extends AbstractController
         $conn = $this->getDoctrine()->getConnection();
 
         $stmt = $conn->prepare('
-            SELECT 
-                w.uuid 
-            FROM 
+            SELECT
+                w.uuid
+            FROM
                 arc_world_object.world_object w
                     INNER JOIN
                 arc_photo.element pe ON w.id = pe.world_object_id
             WHERE
                 pe.photo_id = :photo_id
-            GROUP BY 
+            GROUP BY
                 w.id
         ');
 
@@ -280,7 +277,7 @@ class PhotoController extends AbstractController
 
         $stmt = $conn->prepare('
             SELECT
-                sum(st_area(sector)) as area, 
+                sum(st_area(sector)) as area,
                 element_id
             FROM
                 arc_photo.element e
@@ -288,7 +285,7 @@ class PhotoController extends AbstractController
                 arc_photo.photo p ON p.id = e.photo_id
             WHERE
                 e.photo_id = :photo_id
-            GROUP BY e.element_id        
+            GROUP BY e.element_id
         ');
 
         $stmt->bindValue('photo_id', $photo->getId());
