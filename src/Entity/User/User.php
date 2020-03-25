@@ -111,7 +111,7 @@ class User implements SecurityUserInterface, \Serializable, UuidInterface, UserI
 
     public function serialize()
     {
-        return \igbinary_serialize([
+        return serialize([
             $this->id,
             $this->username,
             $this->password,
@@ -129,7 +129,7 @@ class User implements SecurityUserInterface, \Serializable, UuidInterface, UserI
             // see section on salt below
             // $this->salt
         ]
-            = \igbinary_unserialize($serialized);
+            = unserialize($serialized);
     }
 
     public function getId(): int
