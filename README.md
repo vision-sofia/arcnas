@@ -10,12 +10,12 @@ password: demo
 
 ## Софтуер
 
-PHP 7.2  
-Symfony 4.2    
+PHP 7.4
+Symfony 4.4    
 Doctrine  
 Twig   
-PostgreSQL 10  
-PostGIS 2.5
+PostgreSQL 10 or higher  
+PostGIS 2.5 or higher
 
 ## Инсталиране
 ```
